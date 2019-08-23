@@ -1,4 +1,4 @@
-package com.srj9.Srj9
+package com.srj9
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

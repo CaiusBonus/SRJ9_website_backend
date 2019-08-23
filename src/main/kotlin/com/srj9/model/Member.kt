@@ -1,14 +1,14 @@
-package com.srj9.Srj9.model
+package com.srj9.model
 
 import lombok.Data
 import javax.persistence.*
 
 @Data
 @Entity
-class User {
+class Member {
 
     companion object {
-        const val SEQ = "USER_ID_SEQ"
+        const val SEQ = "MEMBER_ID_SEQ"
     }
 
     @Id
@@ -23,12 +23,16 @@ class User {
     @Column(name="last_name")
     var last_name: String? = null
 
+    @Column(name="poistion")
+    var position: String? = null
+
     @Column(name="email")
     var email: String? = null
 
-    @Column(name="isic_id")
-    var isic_id: String? = null
+    @Column(name="description")
+    var description: String? = null
 
-    @Column(name="admin", columnDefinition="char(3)")
-    var admin: Boolean? = false
+    @Column(name="photo_url")
+    var photo_url: String? = null
+
 }

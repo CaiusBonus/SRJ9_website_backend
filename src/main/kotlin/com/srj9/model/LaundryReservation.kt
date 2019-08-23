@@ -1,6 +1,6 @@
-package com.srj9.Srj9.model
+package com.srj9.model
 
-import com.srj9.Srj9.enums.Status
+import com.srj9.enums.Status
 import lombok.Data
 import java.sql.Timestamp
 import java.util.*
@@ -8,11 +8,11 @@ import javax.persistence.*
 
 @Data
 @Entity
-@Table(name="GYM_RESERVATION")
-class GymReservation {
+@Table(name="LAUNDRY_RESERVATION")
+class LaundryReservation {
 
     companion object {
-        const val SEQ = "GYM_RESERVATION_ID_SEQ"
+        const val SEQ = "LAUNDRY_RESERVATION_ID_SEQ"
     }
 
     @Id
@@ -37,5 +37,5 @@ class GymReservation {
     var status: Status? = null
 
     @Column(name="washing_machine_number")
-    var gym_number: Int? = null
+    var washing_machine_number: Int? = null
 }

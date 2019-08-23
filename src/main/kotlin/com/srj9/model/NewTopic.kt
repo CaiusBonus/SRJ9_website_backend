@@ -1,4 +1,4 @@
-package com.srj9.Srj9.model
+package com.srj9.model
 
 import lombok.Data
 import javax.persistence.*
