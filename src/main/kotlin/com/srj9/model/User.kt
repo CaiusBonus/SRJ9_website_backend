@@ -5,6 +5,7 @@ import javax.persistence.*
 
 @Data
 @Entity
+@Table(name="APP_USER")
 class User {
 
     companion object {

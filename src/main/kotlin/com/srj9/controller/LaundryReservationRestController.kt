@@ -13,11 +13,13 @@ class LaundryReservationRestController {
     @Autowired
     lateinit var laundryReservationRepository: LaundryReservationRepository
 
+    @CrossOrigin(origins = arrayOf("http://localhost:4200"))
     @GetMapping("/laundry_reservation")
     fun getAllLaundryReservations() : List<LaundryReservation> {
         return laundryReservationRepository.findAll()
     }
 
+    @CrossOrigin(origins = arrayOf("http://localhost:4200"))
     @PostMapping("/laundry_reservation")
     fun createLaundryReservation(@Valid @RequestBody laundryReservation: LaundryReservation): LaundryReservation {
         return laundryReservationRepository.save(laundryReservation)
