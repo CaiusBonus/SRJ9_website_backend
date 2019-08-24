@@ -1,11 +1,15 @@
 package com.srj9.model
 
 import com.srj9.enums.Status
-import lombok.Data
+import lombok.*
 import java.sql.Timestamp
 import java.util.*
 import javax.persistence.*
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Data
 @Entity
 @Table(name="LAUNDRY_RESERVATION")

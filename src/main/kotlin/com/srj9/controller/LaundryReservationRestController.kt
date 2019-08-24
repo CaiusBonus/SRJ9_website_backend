@@ -3,6 +3,7 @@ package com.srj9.controller
 import com.srj9.model.LaundryReservation
 import com.srj9.repository.LaundryReservationRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
@@ -20,10 +21,15 @@ class LaundryReservationRestController {
     }
 
     @CrossOrigin(origins = arrayOf("http://localhost:4200"))
+    @GetMapping("/laundry_reservation/{laundryId}")
+    fun getSingleLaundryReservation(@PathVariable laundryId: Long): LaundryReservation {
+        return laundryReservationRepository.getOne(laundryId)
+    }
+
+    @CrossOrigin(origins = arrayOf("http://localhost:4200"))
     @PostMapping("/laundry_reservation")
     fun createLaundryReservation(@Valid @RequestBody laundryReservation: LaundryReservation): LaundryReservation {
         return laundryReservationRepository.save(laundryReservation)
     }
-
 
 }
