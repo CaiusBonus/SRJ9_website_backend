@@ -26,7 +26,7 @@ class GymReservationRestController {
     }
 
     @CrossOrigin(origins = arrayOf("http://localhost:4200"))
-    @GetMapping("/gym_reservation")
+    @PostMapping("/gym_reservation")
     fun createGymReservation(@Valid @RequestBody gymReservation: GymReservation) : GymReservation {
         return gymReservationRepository.save(gymReservation)
     }
