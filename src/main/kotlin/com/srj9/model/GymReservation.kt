@@ -36,6 +36,6 @@ class GymReservation {
     @Column(name="status")
     var status: Status? = null
 
-    @Column(name="washing_machine_number")
+    @Column(name="gym_number")
     var gym_number: Int? = null
 }
