@@ -40,6 +40,6 @@ class LaundryReservation {
     @Column(name="status")
     var status: Status? = null
 
-    @ManyToOne
-    var washing_machine: WashingMachine? = null
+//    @ManyToOne
+//    var washing_machine: WashingMachine? = null
 }
