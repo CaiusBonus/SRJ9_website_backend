@@ -23,7 +23,7 @@ class Member {
     @Column(name="last_name")
     var last_name: String? = null
 
-    @Column(name="poistion")
+    @Column(name="position")
     var position: String? = null
 
     @Column(name="email")
