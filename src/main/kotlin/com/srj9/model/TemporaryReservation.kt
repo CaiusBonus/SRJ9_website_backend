@@ -8,24 +8,18 @@ import javax.persistence.*
 @Data
 @Entity
 @Table(name = "TEMPORARY_RESERVATION")
-class TemporaryReservation {
+data class TemporaryReservation (
 
-    companion object {
-        const val SEQ = "TEMP_RESERVATION_ID_SEQ"
-    }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQ)
-    @SequenceGenerator(name = SEQ, sequenceName = SEQ, allocationSize = 1)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    var id: Long? = null
+    var id: Long? = null,
 
     @Column(name = "date")
-    var date: Date? = null
+    var date: Date? = null,
 
     @Column(name="time_from")
-    var time_from: Timestamp? = null
+    var time_from: Timestamp? = null,
 
     @Column(name="time_until")
     var time_until: Timestamp? = null
-}
+)

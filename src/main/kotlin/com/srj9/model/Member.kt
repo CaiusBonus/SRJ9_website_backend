@@ -5,34 +5,28 @@ import javax.persistence.*
 
 @Data
 @Entity
-class Member {
+data class Member (
 
-    companion object {
-        const val SEQ = "MEMBER_ID_SEQ"
-    }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQ)
-    @SequenceGenerator(name = SEQ, sequenceName = SEQ, allocationSize = 1)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    var id: Long? = null
+    var id: Long? = 0,
 
     @Column(name="first_name")
-    var first_name: String? = null
+    var first_name: String? = null,
 
     @Column(name="last_name")
-    var last_name: String? = null
+    var last_name: String? = null,
 
     @Column(name="position")
-    var position: String? = null
+    var position: String? = null,
 
     @Column(name="email")
-    var email: String? = null
+    var email: String? = null,
 
     @Column(name="description")
-    var description: String? = null
+    var description: String? = null,
 
     @Column(name="photo_url")
     var photo_url: String? = null
 
-}
+)

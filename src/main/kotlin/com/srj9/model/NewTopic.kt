@@ -6,21 +6,15 @@ import javax.persistence.*
 @Data
 @Entity
 @Table(name = "NEW_TOPIC")
-class NewTopic {
+data class NewTopic (
 
-    companion object {
-        const val SEQ = "NEW_TOPIC_ID_SEQ"
-    }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQ)
-    @SequenceGenerator(name = SEQ, sequenceName = SEQ, allocationSize = 1)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    var id: Long? = null
+    var id: Long? = null,
 
     @Column(name="name")
-    var name: String? = null
+    var name: String? = null,
 
     @Column(name="description")
     var description: String? = null
-}
+)

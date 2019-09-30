@@ -3,6 +3,7 @@ package com.srj9.controller
 import com.srj9.service.GymReservationService
 import com.srj9.model.GymReservation
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
@@ -29,5 +30,17 @@ class GymReservationRestController {
     @PostMapping("/gym_reservation")
     fun createGymReservation(@Valid @RequestBody gymReservation: GymReservation) : GymReservation {
         return gymReservationService.createGymReservation(gymReservation)
+    }
+
+    @CrossOrigin(origins = arrayOf("http://localhost:4200"))
+    @PutMapping("/gym_reservation/{reservationId}")
+    fun updateSingleGymReservation(@RequestBody gymReservation: GymReservation, @PathVariable reservationId: Long): ResponseEntity<GymReservation> {
+        return gymReservationService.updateExistingGymReservation(gymReservation,reservationId)
+    }
+
+    @CrossOrigin(origins = arrayOf("http://localhost:4200"))
+    @DeleteMapping("/gym_reservation/{reservationId}")
+    fun deleteExistingGymReservation(@PathVariable reservationId: Long): ResponseEntity<Void> {
+        return gymReservationService.deleteGymReservation(reservationId)
     }
 }
