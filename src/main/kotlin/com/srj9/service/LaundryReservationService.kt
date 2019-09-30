@@ -27,10 +27,10 @@ class LaundryReservationService {
         return laundryReservationRepository.save(laundryReservation)
     }
 
-//    fun getAllReservationsForCurrentWeek(): List<LaundryReservation> {
-//        val localizedWeek = LocalizedWeek()
-//        return laundryReservationRepository.findLaundryReservationsByFirstDayOfWeekAndLastDayOfWeek(localizedWeek.getFirstDay().toDate(), localizedWeek.getLastDay().toDate())
-//    }
+    fun getAllReservationsForCurrentWeek(): List<LaundryReservation> {
+        val localizedWeek = LocalizedWeek()
+        return laundryReservationRepository.findLaundryReservationsBetweenFirstDayOfWeekAndLastDayOfWeek(localizedWeek.getFirstDay().toDate(), localizedWeek.getLastDay().toDate())
+    }
 
     fun updateExistingLaundryReservation(newLaundryReservation: LaundryReservation, reservationId: Long): ResponseEntity<LaundryReservation> {
         return laundryReservationRepository.findById(reservationId)

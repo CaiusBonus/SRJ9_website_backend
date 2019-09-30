@@ -33,11 +33,11 @@ class LaundryReservationRestController {
         return laundryReservationService.createLaundryReservation(laundryReservation)
     }
 
-//    @CrossOrigin(origins = arrayOf("http://localhost:4200"))
-//    @GetMapping("/laundry_reservation/current_week")
-//    fun getAllReservationsForCurrentWeek(): List<LaundryReservation> {
-//        return laundryReservationService.getAllReservationsForCurrentWeek()
-//    }
+    @CrossOrigin(origins = arrayOf("http://localhost:4200"))
+    @GetMapping("/laundry_reservation/current_week")
+    fun getAllReservationsForCurrentWeek(): List<LaundryReservation> {
+        return laundryReservationService.getAllReservationsForCurrentWeek()
+    }
 
     @CrossOrigin(origins = arrayOf("http://localhost:4200"))
     @GetMapping("/laundry_reservation/available_hours")
