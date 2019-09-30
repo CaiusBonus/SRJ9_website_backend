@@ -3,6 +3,7 @@ package com.srj9.controller
 import com.srj9.model.LaundryReservation
 import com.srj9.service.LaundryReservationService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.*
 import javax.validation.Valid
@@ -21,9 +22,9 @@ class LaundryReservationRestController {
     }
 
     @CrossOrigin(origins = arrayOf("http://localhost:4200"))
-    @GetMapping("/laundry_reservation/{laundryId}")
-    fun getSingleLaundryReservation(@PathVariable laundryId: Long): LaundryReservation {
-        return laundryReservationService.getSingleLaundryReservation(laundryId)
+    @GetMapping("/laundry_reservation/{reservationId}")
+    fun getSingleLaundryReservation(@PathVariable reservationId: Long): LaundryReservation {
+        return laundryReservationService.getSingleLaundryReservation(reservationId)
     }
 
     @CrossOrigin(origins = arrayOf("http://localhost:4200"))
@@ -42,6 +43,18 @@ class LaundryReservationRestController {
     @GetMapping("/laundry_reservation/available_hours")
     fun getAllAvailableHoursForSpecificDate(@PathVariable laundryDate: Date): String {
         return ""
+    }
+
+    @CrossOrigin(origins = arrayOf("http://localhost:4200"))
+    @PutMapping("/laundry_reservation/{reservationId}")
+    fun updateExistingReservation(@RequestBody laundryReservation: LaundryReservation, @PathVariable reservationId: Long): ResponseEntity<LaundryReservation> {
+        return laundryReservationService.updateExistingLaundryReservation(laundryReservation,reservationId)
+    }
+
+    @CrossOrigin(origins = arrayOf("http://localhost:4200"))
+    @DeleteMapping("/laundry_reservation/{reservationId}")
+    fun deleteExistingReservation(@PathVariable reservationId: Long): ResponseEntity<Void> {
+        return laundryReservationService.deleteLaundryReservation(reservationId)
     }
 
 }

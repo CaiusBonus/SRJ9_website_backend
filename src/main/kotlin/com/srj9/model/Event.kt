@@ -3,27 +3,21 @@ package com.srj9.model
 import java.util.*
 import javax.persistence.*
 
-class Event {
+data class Event (
 
-    companion object {
-        const val SEQ = "EVENT_ID_SEQ"
-    }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQ)
-    @SequenceGenerator(name = SEQ, sequenceName = SEQ, allocationSize = 1)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    var id: Long? = null
+    var id: Long? = 0,
 
     @Column(name="start_date")
-    var start_date: Date? = null
+    var start_date: Date? = null,
 
     @Column(name="end_date")
-    var end_date: Date? = null
+    var end_date: Date? = null,
 
     @Column(name="name")
-    var name: String? = null
+    var name: String? = null,
 
     @Column(name="description")
     var description: String? = null
-}
+)
