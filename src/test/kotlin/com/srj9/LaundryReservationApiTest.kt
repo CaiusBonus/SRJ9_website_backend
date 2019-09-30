@@ -1,7 +1,6 @@
 package com.srj9
 
 import com.srj9.enums.Status
-import com.srj9.model.GymReservation
 import com.srj9.model.LaundryReservation
 import com.srj9.service.LaundryReservationService
 import org.junit.Test
@@ -29,7 +28,7 @@ class LaundryReservationApiTest {
     }
 
     @Test
-    fun getAllGymReservations() {
+    fun getAllLaundryReservations() {
         laundryReservationService.createLaundryReservation(LaundryReservation(0L,"3123131", Date(), null,null, Status.RESERVED))
         val reservations = laundryReservationService.getAllLaundryReservations()
         println(reservations.size)
@@ -37,7 +36,7 @@ class LaundryReservationApiTest {
     }
 
     @Test
-    fun getSingleGymReservation() {
+    fun getSingleLaundryReservation() {
         laundryReservationService.createLaundryReservation(LaundryReservation(0L,"3123131", Date(), null,null, Status.RESERVED))
         val singleReservation = laundryReservationService.getSingleLaundryReservation(1L)
         println(singleReservation)

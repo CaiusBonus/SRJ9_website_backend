@@ -4,17 +4,11 @@ import com.srj9.enums.Status
 import com.srj9.model.GymReservation
 import com.srj9.service.GymReservationService
 import org.junit.Test
-
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit4.SpringRunner
-import java.sql.Timestamp
-import java.text.SimpleDateFormat
-import java.time.Instant
-import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.test.assertNotNull
 
