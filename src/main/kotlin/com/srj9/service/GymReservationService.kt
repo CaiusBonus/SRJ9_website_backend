@@ -2,6 +2,8 @@ package com.srj9.service
 
 import com.srj9.model.GymReservation
 import com.srj9.repository.GymReservationRepository
+import com.srj9.util.LocalizedWeek
+import com.srj9.util.toDate
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -23,6 +25,11 @@ class GymReservationService {
 
     fun createGymReservation(gymReservation: GymReservation): GymReservation {
         return gymReservationRepository.save(gymReservation)
+    }
+
+    fun getAllReservationsForCurrentWeek(): List<GymReservation> {
+        val localizedWeek = LocalizedWeek()
+        return gymReservationRepository.findGymReservationsBetweenFirstDayOfWeekAndLastDayOfWeek(localizedWeek.getFirstDay().toDate(), localizedWeek.getLastDay().toDate())
     }
 
     fun updateExistingGymReservation(newGymReservation: GymReservation, reservationId: Long): ResponseEntity<GymReservation> {

@@ -33,6 +33,12 @@ class GymReservationRestController {
     }
 
     @CrossOrigin(origins = arrayOf("http://localhost:4200"))
+    @GetMapping("/gym_reservation/current_week")
+    fun getAllReservationsForCurrentWeek(): List<GymReservation> {
+        return gymReservationService.getAllReservationsForCurrentWeek()
+    }
+
+    @CrossOrigin(origins = arrayOf("http://localhost:4200"))
     @PutMapping("/gym_reservation/{reservationId}")
     fun updateSingleGymReservation(@RequestBody gymReservation: GymReservation, @PathVariable reservationId: Long): ResponseEntity<GymReservation> {
         return gymReservationService.updateExistingGymReservation(gymReservation,reservationId)
