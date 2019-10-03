@@ -31,4 +31,4 @@ jobs:
         FTP_SERVER: ${{ secrets.FTP_SERVER }}
         FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
         FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-        LOCAL_DIR: target
+        LOCAL_DIR: target/Srj9-0.0.1-SNAPSHOT.jar
