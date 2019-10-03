@@ -20,7 +20,7 @@ jobs:
         
     - name: Build Project
       run: |
-        mvn clean install
+        mvn clean install -Dmaven.test.skip=true
         
     - name: List output files
       run: ls
