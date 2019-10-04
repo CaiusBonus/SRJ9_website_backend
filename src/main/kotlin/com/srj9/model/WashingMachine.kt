@@ -5,16 +5,16 @@ import javax.persistence.*
 
 @Data
 @Entity
-@Table(name = "NEW_TOPIC")
-data class NewTopic (
+@Table(name = "WASHING_MACHINE")
+data class WashingMachine (
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     var id: Long? = null,
 
-    @Column(name="name")
-    var name: String? = null,
+    @Column(name = "number")
+    var number: Number? = null
 
-    @Column(name="description")
-    var description: String? = null
+//    @OneToMany
+//    var laundryReservation: LaundryReservation? = null
 )

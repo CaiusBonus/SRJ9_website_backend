@@ -9,33 +9,27 @@ import javax.persistence.*
 @Data
 @Entity
 @Table(name="GYM_RESERVATION")
-class GymReservation {
+data class GymReservation (
 
-    companion object {
-        const val SEQ = "GYM_RESERVATION_ID_SEQ"
-    }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQ)
-    @SequenceGenerator(name = SEQ, sequenceName = SEQ, allocationSize = 1)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    var id: Long? = null
+    var id: Long? = 0,
 
     @Column(name="reservation_number")
-    var reservation_number: String? = null
+    var reservation_number: String? = null,
 
     @Column(name="date")
-    var date: Date? = null
+    var date: Date? = null,
 
     @Column(name="time_from")
-    var time_from: Timestamp? = null
+    var time_from: Timestamp? = null,
 
     @Column(name="time_until")
-    var time_until: Timestamp? = null
+    var time_until: Timestamp? = null,
 
     @Column(name="status")
-    var status: Status? = null
+    var status: Status? = null,
 
-    @Column(name="washing_machine_number")
+    @Column(name="gym_number")
     var gym_number: Int? = null
-}
+)

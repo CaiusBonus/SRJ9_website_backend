@@ -1,41 +1,39 @@
 package com.srj9.model
 
 import com.srj9.enums.Status
-import lombok.Data
+import lombok.*
 import java.sql.Timestamp
 import java.util.*
 import javax.persistence.*
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Data
 @Entity
 @Table(name="LAUNDRY_RESERVATION")
-class LaundryReservation {
+data class LaundryReservation (
 
-    companion object {
-        const val SEQ = "LAUNDRY_RESERVATION_ID_SEQ"
-    }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQ)
-    @SequenceGenerator(name = SEQ, sequenceName = SEQ, allocationSize = 1)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    var id: Long? = null
+    var id: Long? = 0,
 
     @Column(name="reservation_number")
-    var reservation_number: String? = null
+    var reservation_number: String? = null,
 
     @Column(name="date")
-    var date: Date? = null
+    var date: Date? = null,
 
     @Column(name="time_from")
-    var time_from: Timestamp? = null
+    var time_from: Timestamp? = null,
 
     @Column(name="time_until")
-    var time_until: Timestamp? = null
+    var time_until: Timestamp? = null,
 
     @Column(name="status")
     var status: Status? = null
 
-    @Column(name="washing_machine_number")
-    var washing_machine_number: Int? = null
-}
+//    @ManyToOne
+//    var washing_machine: WashingMachine? = null
+)
