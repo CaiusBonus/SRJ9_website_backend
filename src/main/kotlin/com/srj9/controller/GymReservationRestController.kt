@@ -21,7 +21,6 @@ class GymReservationRestController {
 
     @ApiOperation(value = "Retreive all gym reservations", notes = "Retrieves all gym reservations", responseContainer = "List")
     @ApiResponse(code = 200, message = "Successfully retrieved list of gym reservations")
-    @CrossOrigin(origins = arrayOf("http://localhost:4200"))
     @GetMapping("/gym_reservation")
     fun getAllGymReservations(): List<GymReservation> {
         return gymReservationService.getAllGymReservations()
@@ -33,7 +32,6 @@ class GymReservationRestController {
         ApiResponse(code = 404, message = "Reservation is not found"),
         ApiResponse(code = 500, message = "Internal Server Error")
     )
-    @CrossOrigin(origins = arrayOf("http://localhost:4200"))
     @GetMapping("/gym_reservation/{reservationId}")
     fun getSingleGymReservation(@PathVariable reservationId: Long): GymReservation {
         return gymReservationService.getSingleGymReservation(reservationId)
@@ -45,10 +43,19 @@ class GymReservationRestController {
             ApiResponse(code = 400, message = "Input validation failed"),
             ApiResponse(code = 500, message = "Internat Server Error")
     )
-    @CrossOrigin(origins = arrayOf("http://localhost:4200"))
     @PostMapping("/gym_reservation")
     fun createGymReservation(@Valid @RequestBody gymReservation: GymReservation) : GymReservation {
         return gymReservationService.createGymReservation(gymReservation)
+    }
+
+    @ApiOperation(value = "Retrieve all gym reservations for current week", notes = "All gym reservations for current week will be sent as the response", responseContainer = "List")
+    @ApiResponses(
+            ApiResponse(code = 200, message = "Successfully retrieved list of gym reservations for current week"),
+            ApiResponse(code = 500, message = "Internal Server Error")
+    )
+    @GetMapping("/gym_reservation/current_week")
+    fun getAllReservationsForCurrentWeek(): List<GymReservation> {
+        return gymReservationService.getAllReservationsForCurrentWeek()
     }
 
     @ApiOperation(value = "Update gym reservation", notes = "Updates gym reservation specified by reservationId with content in request body")
@@ -57,7 +64,6 @@ class GymReservationRestController {
             ApiResponse(code = 404, message = "Reseration not found"),
             ApiResponse(code = 500, message = "Internal Server Error")
     )
-    @CrossOrigin(origins = arrayOf("http://localhost:4200"))
     @PutMapping("/gym_reservation/{reservationId}")
     fun updateExistingGymReservation(@RequestBody gymReservation: GymReservation, @PathVariable reservationId: Long): ResponseEntity<GymReservation> {
         return gymReservationService.updateExistingGymReservation(gymReservation,reservationId)
@@ -69,7 +75,6 @@ class GymReservationRestController {
             ApiResponse(code = 404, message = "Reservation not found"),
             ApiResponse(code = 500, message = "Internal Server Error")
     )
-    @CrossOrigin(origins = arrayOf("http://localhost:4200"))
     @DeleteMapping("/gym_reservation/{reservationId}")
     fun deleteExistingGymReservation(@PathVariable reservationId: Long): ResponseEntity<Void> {
         return gymReservationService.deleteGymReservation(reservationId)
