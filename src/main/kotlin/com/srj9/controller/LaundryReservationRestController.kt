@@ -8,6 +8,8 @@ import io.swagger.annotations.ApiResponses
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.time.LocalDate
+import java.time.LocalTime
 import java.util.*
 import javax.validation.Valid
 
@@ -53,7 +55,7 @@ class LaundryReservationRestController {
             ApiResponse(code = 500, message = "Internal Server Error")
     )
     @GetMapping("/laundry_reservation/current_week")
-    fun getAllReservationsForCurrentWeek(): List<LaundryReservation> {
+    fun getAllReservationsForCurrentWeek(): Map<LocalDate, Map<LocalTime, Boolean>> {
         return laundryReservationService.getAllReservationsForCurrentWeek()
     }
 
