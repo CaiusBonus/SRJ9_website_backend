@@ -1,0 +1,34 @@
+name: Copy Files to server
+
+on:
+  pull_request:
+    branches: 
+      - develop
+      - master
+
+jobs:
+  FTP-Deploy-Action:
+    name: FTP-Deploy-Action
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    
+    - name: Use Node.js 12.x
+      uses: actions/setup-node@v1
+      with:
+        java-version: 1.8
+        
+    - name: Build Project
+      run: |
+        mvn clean install -Dmaven.test.skip=true
+        
+    - name: List output files
+      run: ls
+      
+    - name: FTP-Deploy-Action
+      uses: SamKirkland/FTP-Deploy-Action@master
+      env:
+        FTP_SERVER: ${{ secrets.FTP_SERVER }}
+        FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+        FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        LOCAL_DIR: target
