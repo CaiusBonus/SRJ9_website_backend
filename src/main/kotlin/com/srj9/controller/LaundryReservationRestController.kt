@@ -20,7 +20,6 @@ class LaundryReservationRestController {
 
     @ApiOperation(value = "Retreive all laundry reservations", notes = "Retrieves all laundry reservations", responseContainer = "List")
     @ApiResponse(code = 200, message = "Successfully retrieved list of laundry reservations")
-    @CrossOrigin(origins = arrayOf("http://localhost:4200"))
     @GetMapping("/laundry_reservation")
     fun getAllLaundryReservations() : List<LaundryReservation> {
         return laundryReservationService.getAllLaundryReservations()
@@ -32,7 +31,6 @@ class LaundryReservationRestController {
             ApiResponse(code = 404, message = "Reservation is not found"),
             ApiResponse(code = 500, message = "Internal Server Error")
     )
-    @CrossOrigin(origins = arrayOf("http://localhost:4200"))
     @GetMapping("/laundry_reservation/{reservationId}")
     fun getSingleLaundryReservation(@PathVariable reservationId: Long): LaundryReservation {
         return laundryReservationService.getSingleLaundryReservation(reservationId)
@@ -42,21 +40,23 @@ class LaundryReservationRestController {
     @ApiResponses(
             ApiResponse(code = 201, message = "Reservation successfully created"),
             ApiResponse(code = 400, message = "Input validation failed"),
-            ApiResponse(code = 500, message = "Internat Server Error")
+            ApiResponse(code = 500, message = "Internal Server Error")
     )
-    @CrossOrigin(origins = arrayOf("http://localhost:4200"))
     @PostMapping("/laundry_reservation")
     fun createLaundryReservation(@Valid @RequestBody laundryReservation: LaundryReservation): LaundryReservation {
         return laundryReservationService.createLaundryReservation(laundryReservation)
     }
 
-//    @CrossOrigin(origins = arrayOf("http://localhost:4200"))
-//    @GetMapping("/laundry_reservation/current_week")
-//    fun getAllReservationsForCurrentWeek(): List<LaundryReservation> {
-//        return laundryReservationService.getAllReservationsForCurrentWeek()
-//    }
+    @ApiOperation(value = "Retrieve all laundry reservations for current week", notes = "All laundry reservations for current week will be sent as the response", responseContainer = "List")
+    @ApiResponses(
+            ApiResponse(code = 200, message = "Successfully retrieved list of laundry reservations for current week"),
+            ApiResponse(code = 500, message = "Internal Server Error")
+    )
+    @GetMapping("/laundry_reservation/current_week")
+    fun getAllReservationsForCurrentWeek(): List<LaundryReservation> {
+        return laundryReservationService.getAllReservationsForCurrentWeek()
+    }
 
-    @CrossOrigin(origins = arrayOf("http://localhost:4200"))
     @GetMapping("/laundry_reservation/available_hours")
     fun getAllAvailableHoursForSpecificDate(@PathVariable laundryDate: Date): String {
         return ""
@@ -65,10 +65,9 @@ class LaundryReservationRestController {
     @ApiOperation(value = "Update laundry reservation", notes = "Updates laundry reservation specified by reservationId with content in request body")
     @ApiResponses(
             ApiResponse(code = 200, message = "Reservation successfully updated"),
-            ApiResponse(code = 404, message = "Reseration not found"),
+            ApiResponse(code = 404, message = "Reservation not found"),
             ApiResponse(code = 500, message = "Internal Server Error")
     )
-    @CrossOrigin(origins = arrayOf("http://localhost:4200"))
     @PutMapping("/laundry_reservation/{reservationId}")
     fun updateExistingReservation(@RequestBody laundryReservation: LaundryReservation, @PathVariable reservationId: Long): ResponseEntity<LaundryReservation> {
         return laundryReservationService.updateExistingLaundryReservation(laundryReservation,reservationId)
@@ -80,10 +79,8 @@ class LaundryReservationRestController {
             ApiResponse(code = 404, message = "Reservation not found"),
             ApiResponse(code = 500, message = "Internal Server Error")
     )
-    @CrossOrigin(origins = arrayOf("http://localhost:4200"))
     @DeleteMapping("/laundry_reservation/{reservationId}")
     fun deleteExistingReservation(@PathVariable reservationId: Long): ResponseEntity<Void> {
         return laundryReservationService.deleteLaundryReservation(reservationId)
     }
-
 }
