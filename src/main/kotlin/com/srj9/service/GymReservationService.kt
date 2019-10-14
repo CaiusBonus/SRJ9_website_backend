@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
+import java.time.LocalDate
 
 @Service
 class GymReservationService {
@@ -29,7 +30,11 @@ class GymReservationService {
 
     fun getAllReservationsForCurrentWeek(): List<GymReservation> {
         val localizedWeek = LocalizedWeek()
-        return gymReservationRepository.findGymReservationsBetweenFirstDayOfWeekAndLastDayOfWeek(localizedWeek.getFirstDay().toDate(), localizedWeek.getLastDay().toDate())
+        return gymReservationRepository.findGymReservationsBetweenFirstDayAndLastDay(localizedWeek.getFirstDay().toDate(), localizedWeek.getLastDay().toDate())
+    }
+
+    fun getAllReservationsBetweenDates(from: LocalDate, to: LocalDate): List<GymReservation> {
+        return gymReservationRepository.findGymReservationsBetweenFirstDayAndLastDay(from.toDate(), to.toDate())
     }
 
     fun updateExistingGymReservation(newGymReservation: GymReservation, reservationId: Long): ResponseEntity<GymReservation> {
