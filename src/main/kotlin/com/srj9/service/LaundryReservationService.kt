@@ -31,9 +31,17 @@ class LaundryReservationService {
         return laundryReservationRepository.save(laundryReservation)
     }
 
+    fun getAllReservationsBetweenDates(from: LocalDate, to: LocalDate): Map<LocalDate, Map<LocalTime, Boolean>> {
+        val laundryReservations = laundryReservationRepository.findLaundryReservationsBetweenFirstDayAndLastDay(from.toDate(), to.toDate())
+        val laundryTimes = DateUtils.getDatesBetween(from, to)
+                .map { it to DateUtils.getTimesBetween(LocalTime.of(6, 0), LocalTime.of(20, 30), 30).map { it to true }.toMap().toMutableMap() }.toMap()
+        markReservedTimes(laundryReservations, laundryTimes)
+        return laundryTimes
+    }
+
     fun getAllReservationsForCurrentWeek(): Map<LocalDate, Map<LocalTime, Boolean>> {
         val localizedWeek = LocalizedWeek()
-        val laundryReservations = laundryReservationRepository.findLaundryReservationsBetweenFirstDayOfWeekAndLastDayOfWeek(localizedWeek.getFirstDay().toDate(), localizedWeek.getLastDay().toDate())
+        val laundryReservations = laundryReservationRepository.findLaundryReservationsBetweenFirstDayAndLastDay(localizedWeek.getFirstDay().toDate(), localizedWeek.getLastDay().toDate())
         val laundryTimes = DateUtils.getDatesBetween(localizedWeek.getFirstDay(), localizedWeek.getLastDay())
                 .map { it to DateUtils.getTimesBetween(LocalTime.of(6, 0), LocalTime.of(20, 30), 30).map { it to true }.toMap().toMutableMap() }.toMap()
         markReservedTimes(laundryReservations, laundryTimes)
