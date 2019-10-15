@@ -10,6 +10,6 @@ import java.util.*
 
 
 @Repository
-interface RoleRepository: JpaRepository<User, Long> {
+interface RoleRepository: JpaRepository<Role, Long> {
     fun findByName(roleName: RoleName): Optional<Role>
 }
