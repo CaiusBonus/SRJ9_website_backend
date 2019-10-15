@@ -75,19 +75,19 @@ class AuthRestController {
         var user: User = User(signUpRequest.name!!, signUpRequest.username!!, signUpRequest.email!!, encoder.encode(signUpRequest.password))
 
         val strRoles: Set<String> = signUpRequest.role!!
-        val roles: Set<Role> = HashSet()
+        var roles: Set<Role> = HashSet()
 
         strRoles.forEach { role ->
             when (role) {
                 "admin" -> {
                     val adminRole = roleRepository.findByName(RoleName.ROLE_ADMIN)
                             .orElseThrow { RuntimeException("Fail! -> Cause: User Role not find.") }
-                    roles.plus(adminRole)
+                    roles = roles.plusElement(adminRole)
                 }
                 else -> {
                     val userRole = roleRepository.findByName(RoleName.ROLE_USER)
                             .orElseThrow { RuntimeException("Fail! -> Cause: User Role not find.") }
-                    roles.plus(userRole)
+                    roles = roles.plusElement(userRole)
                 }
             }
         }

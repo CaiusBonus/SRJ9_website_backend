@@ -42,7 +42,6 @@ data class User (
     @JoinTable(name = "user_roles",
             joinColumns = [JoinColumn(name = "user_id")],
             inverseJoinColumns = [JoinColumn(name = "role_id")])
-    @Column(name = "user_role")
     var role: Set<Role> = HashSet()
 ) {
     constructor(name: String, username: String, email: String, password: String) : this() {
