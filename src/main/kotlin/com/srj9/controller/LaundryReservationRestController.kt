@@ -27,6 +27,7 @@ class LaundryReservationRestController {
         return laundryReservationService.getAllLaundryReservations()
     }
 
+
     @ApiOperation(value = "Retrieve single laundry reservation", notes = "Retrieves single laundry reservation based on reservation ID")
     @ApiResponses(
             ApiResponse(code = 200, message = "Successfully retrieved single laundry reservation"),
