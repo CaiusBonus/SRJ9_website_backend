@@ -1,7 +1,7 @@
 package com.srj9.controller
 
-import com.srj9.service.GymReservationService
 import com.srj9.model.GymReservation
+import com.srj9.service.GymReservationService
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiResponse
@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
-import java.time.LocalTime
 import javax.validation.Valid
 
 @RestController

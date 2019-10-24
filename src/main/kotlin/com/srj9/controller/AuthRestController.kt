@@ -1,6 +1,7 @@
 package com.srj9.controller
 
 import com.srj9.model.Role
+import com.srj9.model.RoleName
 import com.srj9.model.User
 import com.srj9.repository.RoleRepository
 import com.srj9.repository.UserRepository
@@ -17,13 +18,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.crypto.password.PasswordEncoder
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
-import com.srj9.model.RoleName
-
 
 
 @RestController

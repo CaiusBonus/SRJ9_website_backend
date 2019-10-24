@@ -31,5 +31,9 @@ data class GymReservation (
     var status: Status? = null,
 
     @Column(name="gym_number")
-    var gym_number: Int? = null
+    var gym_number: Int? = null,
+
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    var user: User? = null
 )

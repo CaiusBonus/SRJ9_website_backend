@@ -2,18 +2,17 @@ package com.srj9.security.jwt
 
 import com.srj9.service.UserPrinciple
 import io.jsonwebtoken.*
-
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Component
-import io.jsonwebtoken.*
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import java.util.*
 
 
 @Component
 class JwtProvider {
+
+    private val logger = LoggerFactory.getLogger(JwtProvider::class.java)
 
     @Value("\${srj9.app.jwtSecret}")
     private val jwtSecret: String? = null
@@ -57,10 +56,5 @@ class JwtProvider {
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
                 .body.subject
-    }
-
-    companion object {
-
-        private val logger = LoggerFactory.getLogger(JwtProvider::class.java)
     }
 }
