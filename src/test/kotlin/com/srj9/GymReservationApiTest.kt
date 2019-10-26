@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit4.SpringRunner
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.test.assertNotNull
 
@@ -57,6 +59,22 @@ class GymReservationApiTest {
         val deletedReservation = gymReservationService.deleteGymReservation(1L)
         println(deletedReservation)
         assert(deletedReservation.statusCode.is2xxSuccessful)
+    }
+
+    @Test
+    fun shouldReceiveReservationsForSpecificWeek() {
+        gymReservationService.createGymReservation(GymReservation(0L,"3123131", Date(), Timestamp.valueOf("2019-10-14 19:00:00"),Timestamp.valueOf("2019-10-14 20:00:00"), Status.RESERVED, 2))
+        val reservationsForSpecificWeek = gymReservationService.getAllReservationsForCurrentWeek()
+        println(reservationsForSpecificWeek)
+        assert(reservationsForSpecificWeek.isNotEmpty())
+    }
+
+    @Test
+    fun shouldReceiveEmptyListWithReservations() {
+        gymReservationService.createGymReservation(GymReservation(0L,"3123131", SimpleDateFormat("yyyy-MM-dd").parse("2019-10-24"), Timestamp.valueOf("2019-10-24 19:00:00"),Timestamp.valueOf("2019-10-24 20:00:00"), Status.RESERVED, 2))
+        val reservationsForSpecificWeek = gymReservationService.getAllReservationsForCurrentWeek()
+        println(reservationsForSpecificWeek)
+        assert(reservationsForSpecificWeek.isEmpty())
     }
 
 }

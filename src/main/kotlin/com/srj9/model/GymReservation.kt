@@ -22,14 +22,18 @@ data class GymReservation (
     var date: Date? = null,
 
     @Column(name="time_from")
-    var time_from: Timestamp? = null,
+    var time_from: Date? = null,
 
     @Column(name="time_until")
-    var time_until: Timestamp? = null,
+    var time_until: Date? = null,
 
     @Column(name="status")
     var status: Status? = null,
 
     @Column(name="gym_number")
-    var gym_number: Int? = null
+    var gym_number: Int? = null,
+
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    var user: User? = null
 )
