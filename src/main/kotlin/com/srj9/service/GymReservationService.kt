@@ -20,6 +20,10 @@ class GymReservationService {
         return gymReservationRepository.findAll()
     }
 
+    fun getAllReservationsForSpecificUser(userId: Long): List<GymReservation> {
+        return gymReservationRepository.findGymReservationsByUserId(userId)
+    }
+
     fun getSingleGymReservation(reservationId: Long): GymReservation {
         return gymReservationRepository.getOne(reservationId)
     }

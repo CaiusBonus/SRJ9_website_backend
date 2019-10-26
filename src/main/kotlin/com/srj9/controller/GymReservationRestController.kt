@@ -27,6 +27,13 @@ class GymReservationRestController {
         return gymReservationService.getAllGymReservations()
     }
 
+    @ApiOperation(value = "Retrieve all gym reservations for specific user", responseContainer = "List")
+    @ApiResponse(code = 200, message = "Successfully retrieved list of gym reservations")
+    @GetMapping("/gym_reservation/user/{userId}")
+    fun getAllGymReservationsForSpecificUser(@PathVariable userId: Long): List<GymReservation> {
+        return gymReservationService.getAllReservationsForSpecificUser(userId)
+    }
+
     @ApiOperation(value = "Retrieve single gym reservation", notes = "Retrieves single gym reservation based on reservation ID")
     @ApiResponses(
         ApiResponse(code = 200, message = "Successfully retrieved single gym reservation"),
