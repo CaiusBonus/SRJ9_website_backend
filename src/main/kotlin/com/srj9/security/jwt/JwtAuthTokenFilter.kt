@@ -13,10 +13,6 @@ import javax.servlet.ServletException
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-
-
-
-
 class JwtAuthTokenFilter: OncePerRequestFilter() {
 
     private val loggers = LoggerFactory.getLogger(JwtAuthTokenFilter::class.java)
