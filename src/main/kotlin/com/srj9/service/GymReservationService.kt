@@ -14,7 +14,6 @@ import java.time.LocalDate
 import java.time.temporal.TemporalAdjusters
 
 
-
 @Service
 class GymReservationService {
 
@@ -81,7 +80,6 @@ class GymReservationService {
     }
 
     fun createGymReservationsForFirstGym() {
-        var firstInWeek = date.with(TemporalAdjusters.nextOrSame(DayOfWeek.TUESDAY))
         var firstTuesdayInMonth = date.with(TemporalAdjusters.nextOrSame(DayOfWeek.TUESDAY))
         var firstThurstDayInMonth = date.with(TemporalAdjusters.nextOrSame(DayOfWeek.THURSDAY))
         var firstSundayInMonth = date.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
