@@ -66,7 +66,8 @@ class GymReservationService {
                                     time_from = newGymReservation.time_from,
                                     time_until = newGymReservation.time_until,
                                     status = newGymReservation.status,
-                                    gym_number = newGymReservation.gym_number)
+                                    gym_number = newGymReservation.gym_number,
+                                    user = newGymReservation.user)
                     ResponseEntity.ok().body(gymReservationRepository.save(updatedReservation))
                 }.orElse(ResponseEntity.notFound().build())
     }
