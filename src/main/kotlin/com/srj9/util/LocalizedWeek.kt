@@ -11,7 +11,7 @@ class LocalizedWeek {
     private val tz: ZoneId = ZoneId.systemDefault() // TODO Consider if system default is enough or we need to use something like ZoneId.of("Europe/Paris")
     private val locale: Locale = Locale.ENGLISH
     private val firstDayOfWeek: DayOfWeek = WeekFields.of(locale).firstDayOfWeek
-    private val lastDayOfWeek: DayOfWeek = DayOfWeek.of(((firstDayOfWeek.value + 5) % DayOfWeek.values().size) + 1)
+    private val lastDayOfWeek: DayOfWeek = DayOfWeek.of(((firstDayOfWeek.value + 6) % DayOfWeek.values().size) + 1)
 
     fun getFirstDay(): LocalDate {
         return LocalDate.now(tz).with(TemporalAdjusters.previousOrSame(this.firstDayOfWeek))
@@ -22,4 +22,4 @@ class LocalizedWeek {
     }
 }
 
-fun LocalDate.toDate(): Date = Date.from(this.atStartOfDay(ZoneId.systemDefault()).toInstant())
+fun LocalDate.toDate(): Date = Date.from(this.atStartOfDay(ZoneId.systemDefault()).toInstant().plusSeconds(7200))

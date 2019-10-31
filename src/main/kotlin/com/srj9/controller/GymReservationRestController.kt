@@ -1,7 +1,7 @@
 package com.srj9.controller
 
-import com.srj9.service.GymReservationService
 import com.srj9.model.GymReservation
+import com.srj9.service.GymReservationService
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiResponse
@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiResponses
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.time.LocalDate
 import javax.validation.Valid
 
 @RestController
@@ -19,11 +20,18 @@ class GymReservationRestController {
     @Autowired
     lateinit var gymReservationService: GymReservationService
 
-    @ApiOperation(value = "Retreive all gym reservations", notes = "Retrieves all gym reservations", responseContainer = "List")
+    @ApiOperation(value = "Retrieve all gym reservations", notes = "Retrieves all gym reservations", responseContainer = "List")
     @ApiResponse(code = 200, message = "Successfully retrieved list of gym reservations")
     @GetMapping("/gym_reservation")
     fun getAllGymReservations(): List<GymReservation> {
         return gymReservationService.getAllGymReservations()
+    }
+
+    @ApiOperation(value = "Retrieve all gym reservations for specific user", responseContainer = "List")
+    @ApiResponse(code = 200, message = "Successfully retrieved list of gym reservations")
+    @GetMapping("/gym_reservation/user/{userId}")
+    fun getAllGymReservationsForSpecificUser(@PathVariable userId: Long): List<GymReservation> {
+        return gymReservationService.getAllReservationsForSpecificUser(userId)
     }
 
     @ApiOperation(value = "Retrieve single gym reservation", notes = "Retrieves single gym reservation based on reservation ID")
@@ -56,6 +64,16 @@ class GymReservationRestController {
     @GetMapping("/gym_reservation/current_week")
     fun getAllReservationsForCurrentWeek(): List<GymReservation> {
         return gymReservationService.getAllReservationsForCurrentWeek()
+    }
+
+    @ApiOperation(value = "Retrieve all gym reservations between provided dates", notes = "All gym reservations between provided dates will be sent as the response", responseContainer = "List")
+    @ApiResponses(
+            ApiResponse(code = 200, message = "Successfully retrieved list of gym reservations between provided dates"),
+            ApiResponse(code = 500, message = "Internal Server Error")
+    )
+    @GetMapping("/gym_reservation/between_days")
+    fun getAllReservationsBetweenDates(@RequestParam from: LocalDate, @RequestParam to: LocalDate): List<GymReservation> {
+        return gymReservationService.getAllReservationsBetweenDates(from, to)
     }
 
     @ApiOperation(value = "Update gym reservation", notes = "Updates gym reservation specified by reservationId with content in request body")

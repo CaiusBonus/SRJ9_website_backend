@@ -8,5 +8,5 @@ import java.util.*
 interface LaundryReservationRepository : JpaRepository<LaundryReservation, Long> {
 
     @Query("SELECT r FROM LaundryReservation r WHERE r.date BETWEEN ?1 AND ?2")
-    fun findLaundryReservationsBetweenFirstDayOfWeekAndLastDayOfWeek(firstDayOfWeek: Date, lastDayOfWeek: Date): List<LaundryReservation>
+    fun findLaundryReservationsBetweenFirstDayAndLastDay(firstDay: Date, lastDay: Date): List<LaundryReservation>
 }

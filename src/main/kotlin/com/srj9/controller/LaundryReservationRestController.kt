@@ -20,12 +20,13 @@ class LaundryReservationRestController {
     @Autowired
     lateinit var laundryReservationService: LaundryReservationService
 
-    @ApiOperation(value = "Retreive all laundry reservations", notes = "Retrieves all laundry reservations", responseContainer = "List")
+    @ApiOperation(value = "Retrieve all laundry reservations", notes = "Retrieves all laundry reservations", responseContainer = "List")
     @ApiResponse(code = 200, message = "Successfully retrieved list of laundry reservations")
     @GetMapping("/laundry_reservation")
     fun getAllLaundryReservations() : List<LaundryReservation> {
         return laundryReservationService.getAllLaundryReservations()
     }
+
 
     @ApiOperation(value = "Retrieve single laundry reservation", notes = "Retrieves single laundry reservation based on reservation ID")
     @ApiResponses(
@@ -59,9 +60,14 @@ class LaundryReservationRestController {
         return laundryReservationService.getAllReservationsForCurrentWeek()
     }
 
-    @GetMapping("/laundry_reservation/available_hours")
-    fun getAllAvailableHoursForSpecificDate(@PathVariable laundryDate: Date): String {
-        return ""
+    @ApiOperation(value = "Retrieve all laundry reservations between provided dates", notes = "All laundry reservations between provided dates will be sent as the response", responseContainer = "List")
+    @ApiResponses(
+            ApiResponse(code = 200, message = "Successfully retrieved list of laundry reservations between provided dates"),
+            ApiResponse(code = 500, message = "Internal Server Error")
+    )
+    @GetMapping("/laundry_reservation/between_days")
+    fun getAllReservationsBetweenDates(@RequestParam from: LocalDate, @RequestParam to: LocalDate): Map<LocalDate, Map<LocalTime, Boolean>> {
+        return laundryReservationService.getAllReservationsBetweenDates(from, to)
     }
 
     @ApiOperation(value = "Update laundry reservation", notes = "Updates laundry reservation specified by reservationId with content in request body")
@@ -75,7 +81,7 @@ class LaundryReservationRestController {
         return laundryReservationService.updateExistingLaundryReservation(laundryReservation,reservationId)
     }
 
-    @ApiOperation(value = "Delete laundry reservation", notes = "Delete laundry reservatoin specified by reservationId")
+    @ApiOperation(value = "Delete laundry reservation", notes = "Delete laundry reservation specified by reservationId")
     @ApiResponses(
             ApiResponse(code = 200, message = "Reservation successfully deleted"),
             ApiResponse(code = 404, message = "Reservation not found"),
