@@ -7,13 +7,13 @@ import com.srj9.repository.GymReservationRepository
 import com.srj9.util.LocalizedWeek
 import com.srj9.util.toDate
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Sort
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.temporal.TemporalAdjusters
-import javax.inject.Inject
 
 
 @Service
@@ -32,9 +32,9 @@ class GymReservationService {
     val date = LocalDate.now()
 
     fun getAllGymReservations(): List<GymReservation> {
-        createGymReservationsForFirstGym()
-        createGymReservationsForSecondGym()
-        return gymReservationRepository.findAll()
+//        createGymReservationsForFirstGym()
+//        createGymReservationsForSecondGym()
+        return gymReservationRepository.findAll(Sort.by(Sort.Direction.ASC, "id"))
     }
 
     fun getAllReservationsForSpecificUser(userId: Long): List<GymReservation> {

@@ -9,24 +9,24 @@ import javax.inject.Inject
 @Component
 class EmailService {
 
-    @Inject
-    lateinit var emailSender: JavaMailSender
+//    @Inject
+//    lateinit var emailSender: JavaMailSender
 
     fun sendConfirmationMessageToReceiver(receiver: String, subject: String, text: String) {
-        var message = SimpleMailMessage()
-        message.setTo(receiver)
-        message.setSubject(subject)
-        message.setText(text)
-        emailSender.send(message)
+//        var message = SimpleMailMessage()
+//        message.setTo(receiver)
+//        message.setSubject(subject)
+//        message.setText(text)
+//        emailSender.send(message)
     }
 
     fun sendMessageToReceivers(receivers: List<String>, subject: String, text: String) {
         receivers.forEach { to ->
-            var message = SimpleMailMessage()
-            message.setTo(to)
-            message.setSubject(subject)
-            message.setText(text)
-            emailSender.send(message)
+//            var message = SimpleMailMessage()
+//            message.setTo(to)
+//            message.setSubject(subject)
+//            message.setText(text)
+//            emailSender.send(message)
         }
     }
 
