@@ -58,7 +58,15 @@ class WebSecurityConfig: WebSecurityConfigurerAdapter() {
     override fun configure(http: HttpSecurity) {
         http.cors().and().csrf().disable()
                 // dont authenticate this particular request
-                .authorizeRequests().antMatchers("/api/auth/**").permitAll().antMatchers("/swagger-ui.html").permitAll().antMatchers(HttpMethod.OPTIONS, "/**")
+                .authorizeRequests().antMatchers("/api/auth/**").permitAll()
+                // Allow swagger to make requests
+                .antMatchers("/swagger-ui.html**/**").permitAll()
+                .antMatchers("/webjars/**").permitAll()
+                .antMatchers("/swagger-resources/**").permitAll()
+                .antMatchers("/v2/**").permitAll()
+                // End of swagger requests
+                // /API/ Must be authorized via Bearer token
+                .antMatchers(HttpMethod.OPTIONS, "/api/**")
                 .permitAll().anyRequest()// all other requests need to be authenticated
                 .authenticated().and().exceptionHandling()// make sure we use stateless session; session won't be used to
                 // store user's state.
