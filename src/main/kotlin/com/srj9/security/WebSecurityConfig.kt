@@ -16,6 +16,11 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import antlr.ANTLRTokenTypes.OPTIONS
+import org.springframework.http.HttpMethod
+import org.springframework.security.authorization.AuthenticatedReactiveAuthorizationManager.authenticated
+
+
 
 @Configuration
 @EnableWebSecurity
@@ -51,14 +56,25 @@ class WebSecurityConfig: WebSecurityConfigurerAdapter() {
     }
 
     override fun configure(http: HttpSecurity) {
-//        http.cors().and().csrf().disable()
-//                .authorizeRequests()
-//                .antMatchers("/api/**").permitAll()
-//                .anyRequest().authenticated()
-//                .and()
-//                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter::class.java)
         http.cors().and().csrf().disable()
+                // dont authenticate this particular request
+                .authorizeRequests().antMatchers("/api/auth/**").permitAll()
+                // Allow swagger to make requests
+                .antMatchers("/swagger-ui.html**/**").permitAll()
+                .antMatchers("/webjars/**").permitAll()
+                .antMatchers("/swagger-resources/**").permitAll()
+                .antMatchers("/v2/**").permitAll()
+                // End of swagger requests
+                // /API/ Must be authorized via Bearer token
+                .antMatchers(HttpMethod.OPTIONS, "/api/**")
+                .permitAll().anyRequest()// all other requests need to be authenticated
+                .authenticated().and().exceptionHandling()// make sure we use stateless session; session won't be used to
+                // store user's state.
+                .authenticationEntryPoint(unauthorizedHandler).and().sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+
+        // Add a filter to validate the tokens with every request
+        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter::class.java)
+
     }
 }

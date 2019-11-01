@@ -2,10 +2,12 @@ package com.srj9.service
 
 import com.srj9.enums.Status
 import com.srj9.model.GymReservation
+import com.srj9.model.User
 import com.srj9.repository.GymReservationRepository
 import com.srj9.util.LocalizedWeek
 import com.srj9.util.toDate
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Sort
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
@@ -20,6 +22,9 @@ class GymReservationService {
     @Autowired
     lateinit var gymReservationRepository: GymReservationRepository
 
+    @Autowired
+    lateinit var emailService: EmailService
+
     var gymReservationsForFirstGym :MutableList<GymReservation> = ArrayList()
     var gymReservationsForSecondGym :MutableList<GymReservation> = ArrayList()
     var times_from = arrayOf("21:00","22:00","23:00","00:00")
@@ -27,9 +32,9 @@ class GymReservationService {
     val date = LocalDate.now()
 
     fun getAllGymReservations(): List<GymReservation> {
-        createGymReservationsForFirstGym()
-        createGymReservationsForSecondGym()
-        return gymReservationRepository.findAll()
+//        createGymReservationsForFirstGym()
+//        createGymReservationsForSecondGym()
+        return gymReservationRepository.findAll(Sort.by(Sort.Direction.ASC, "id"))
     }
 
     fun getAllReservationsForSpecificUser(userId: Long): List<GymReservation> {
@@ -126,5 +131,10 @@ class GymReservationService {
 
     fun checkIfIsIteratorInSpecificRange(array: List<Number>, num: Number): Boolean {
         return array.stream().anyMatch { number -> number == num }
+    }
+
+    fun sendConfirmationEmail(gymReservation: GymReservation, user: User) {
+        val text = emailService.createMessage("Nova Rezervacia", "", "", "")
+        emailService.sendConfirmationMessageToReceiver(user.email!!, "Nova rezervacka", text)
     }
 }
