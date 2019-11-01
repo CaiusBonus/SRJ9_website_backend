@@ -2,6 +2,7 @@ package com.srj9.service
 
 import com.srj9.enums.Status
 import com.srj9.model.GymReservation
+import com.srj9.model.User
 import com.srj9.repository.GymReservationRepository
 import com.srj9.util.LocalizedWeek
 import com.srj9.util.toDate
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.temporal.TemporalAdjusters
+import javax.inject.Inject
 
 
 @Service
@@ -19,6 +21,9 @@ class GymReservationService {
 
     @Autowired
     lateinit var gymReservationRepository: GymReservationRepository
+
+    @Autowired
+    lateinit var emailService: EmailService
 
     var gymReservationsForFirstGym :MutableList<GymReservation> = ArrayList()
     var gymReservationsForSecondGym :MutableList<GymReservation> = ArrayList()
@@ -126,5 +131,10 @@ class GymReservationService {
 
     fun checkIfIsIteratorInSpecificRange(array: List<Number>, num: Number): Boolean {
         return array.stream().anyMatch { number -> number == num }
+    }
+
+    fun sendConfirmationEmail(gymReservation: GymReservation, user: User) {
+        val text = emailService.createMessage("Nova Rezervacia", "", "", "")
+        emailService.sendConfirmationMessageToReceiver(user.email!!, "Nova rezervacka", text)
     }
 }
