@@ -72,7 +72,7 @@ class AuthRestController {
         }
 
         // Create new user
-        var user: User = User(signUpRequest.name!!, signUpRequest.username!!, signUpRequest.email!!, encoder.encode(signUpRequest.password))
+        var user: User = User(signUpRequest.first_name!!, signUpRequest.last_name!!, signUpRequest.username!!, signUpRequest.email!!, encoder.encode(signUpRequest.password))
 
         val strRoles: Set<String> = signUpRequest.role!!
         var roles: Set<Role> = HashSet()

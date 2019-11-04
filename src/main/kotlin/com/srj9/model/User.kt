@@ -1,7 +1,5 @@
 package com.srj9.model
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-import jdk.nashorn.internal.objects.annotations.Constructor
 import lombok.Data
 
 import javax.persistence.*
@@ -44,8 +42,9 @@ data class User (
             inverseJoinColumns = [JoinColumn(name = "role_id")])
     var role: Set<Role> = HashSet()
 ) {
-    constructor(name: String, username: String, email: String, password: String) : this() {
-        first_name = name
+    constructor(first_name: String, last_name: String, username: String, email: String, password: String) : this() {
+        this.first_name = first_name
+        this.last_name = last_name
         this.username = username
         this.email = email
         this.password = password

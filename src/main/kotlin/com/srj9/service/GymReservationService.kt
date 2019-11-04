@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.temporal.TemporalAdjusters
+import java.util.*
+import java.util.stream.Collectors
+import kotlin.collections.ArrayList
 
 
 @Service
@@ -28,6 +31,9 @@ class GymReservationService {
     @Autowired
     lateinit var sportOfficerService: SportOfficerService
 
+    @Autowired
+    lateinit var userService: UserService
+
     var gymReservationsForFirstGym :MutableList<GymReservation> = ArrayList()
     var gymReservationsForSecondGym :MutableList<GymReservation> = ArrayList()
     var times_from = arrayOf("21:00","22:00","23:00","00:00")
@@ -35,8 +41,7 @@ class GymReservationService {
     val date = LocalDate.now()
 
     fun getAllGymReservations(): List<GymReservation> {
-//        createGymReservationsForFirstGym()
-//        createGymReservationsForSecondGym()
+        checkIfUserHaveMaximumReservationsForOneWeek(2)
         return gymReservationRepository.findAll(Sort.by(Sort.Direction.ASC, "id"))
     }
 
@@ -61,6 +66,10 @@ class GymReservationService {
 
     fun getAllReservationsBetweenDates(from: LocalDate, to: LocalDate): List<GymReservation> {
         return gymReservationRepository.findGymReservationsBetweenFirstDayAndLastDay(from.toDate(), to.toDate())
+    }
+
+    fun getAllReservationsBetweenDatesForSpecificUser(from: LocalDate, to: LocalDate, user: User): List<GymReservation> {
+        return gymReservationRepository.findGymReservationsBetweenFirstDayAndLastDayAndUser(from.toDate(), to.toDate(), user)
     }
 
     fun updateExistingGymReservation(newGymReservation: GymReservation, reservationId: Long): ResponseEntity<GymReservation> {
@@ -141,7 +150,30 @@ class GymReservationService {
 
     fun sendConfirmationEmail(gymReservation: GymReservation, user: User) {
         val sportOfficer = sportOfficerService.getAllSportOfficers()
-        emailServiceImpl.sendSimpleMessage(user.email!!, "Rezervacka", "NOVA REZERVACKA")
-        emailServiceImpl.sendSimpleMessage(sportOfficer[0].email!!, "Rezervacka", "NOVA REZERVACKA")
+        val userEmail = userService.getSingleUser(user.id!!).email
+        emailServiceImpl.sendMessageToUser(userEmail!!, gymReservation)
+        emailServiceImpl.sendMessageToSportOfficer(sportOfficer[0].email!!, gymReservation)
+    }
+
+    fun closeReservationEarlierThanToday() {
+        val allReservations: List<GymReservation>
+        allReservations = this.getAllGymReservations().stream()
+                .filter { reservation ->
+                    isDateEarlierThanToday(reservation.date!!, date.toDate())
+                }.collect(Collectors.toList())
+        allReservations.forEach { gymReservation -> gymReservation.status = Status.CLOSED }
+        allReservations.forEach { gymReservation -> gymReservationRepository.save(gymReservation) }
+    }
+
+    private fun isDateEarlierThanToday(firstDate: Date, secondDate: Date): Boolean {
+        return firstDate < secondDate
+    }
+
+    private fun checkIfUserHaveMaximumReservationsForOneWeek(userId: Long): Boolean {
+        val user = userService.getSingleUser(userId)
+        val allUsersReservationsForSpecificWeek = this.getAllReservationsBetweenDatesForSpecificUser(date, date.plusDays(7), user)
+        println(allUsersReservationsForSpecificWeek)
+
+        return false
     }
 }
