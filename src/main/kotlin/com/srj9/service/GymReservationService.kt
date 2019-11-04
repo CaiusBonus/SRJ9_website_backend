@@ -23,7 +23,10 @@ class GymReservationService {
     lateinit var gymReservationRepository: GymReservationRepository
 
     @Autowired
-    lateinit var emailService: EmailService
+    lateinit var emailServiceImpl: EmailServiceImpl
+
+    @Autowired
+    lateinit var sportOfficerService: SportOfficerService
 
     var gymReservationsForFirstGym :MutableList<GymReservation> = ArrayList()
     var gymReservationsForSecondGym :MutableList<GymReservation> = ArrayList()
@@ -72,6 +75,9 @@ class GymReservationService {
                                     status = newGymReservation.status,
                                     gym_number = newGymReservation.gym_number,
                                     user = newGymReservation.user)
+                    if (newGymReservation.user != null) {
+                        sendConfirmationEmail(newGymReservation, updatedReservation.user!!)
+                    }
                     ResponseEntity.ok().body(gymReservationRepository.save(updatedReservation))
                 }.orElse(ResponseEntity.notFound().build())
     }
@@ -134,7 +140,8 @@ class GymReservationService {
     }
 
     fun sendConfirmationEmail(gymReservation: GymReservation, user: User) {
-        val text = emailService.createMessage("Nova Rezervacia", "", "", "")
-        emailService.sendConfirmationMessageToReceiver(user.email!!, "Nova rezervacka", text)
+        val sportOfficer = sportOfficerService.getAllSportOfficers()
+        emailServiceImpl.sendSimpleMessage(user.email!!, "Rezervacka", "NOVA REZERVACKA")
+        emailServiceImpl.sendSimpleMessage(sportOfficer[0].email!!, "Rezervacka", "NOVA REZERVACKA")
     }
 }
