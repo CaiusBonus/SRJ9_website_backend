@@ -31,7 +31,7 @@ data class User (
     var username: String? = null,
 
     @NotBlank
-    @Size(min=8, max=100)
+    @Size(min=6, max=100)
     @Column(name="password")
     var password: String? = null,
 

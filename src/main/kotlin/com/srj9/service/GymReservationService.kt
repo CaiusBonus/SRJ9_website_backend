@@ -1,6 +1,7 @@
 package com.srj9.service
 
 import com.srj9.enums.Status
+import com.srj9.exception.NumberOfReservationsExceed
 import com.srj9.model.GymReservation
 import com.srj9.model.User
 import com.srj9.repository.GymReservationRepository
@@ -41,8 +42,8 @@ class GymReservationService {
     val date = LocalDate.now()
 
     fun getAllGymReservations(): List<GymReservation> {
-        checkIfUserHaveMaximumReservationsForOneWeek(2)
         return gymReservationRepository.findAll(Sort.by(Sort.Direction.ASC, "id"))
+                .filter { gymReservation -> gymReservation.status != Status.CLOSED }
     }
 
     fun getAllReservationsForSpecificUser(userId: Long): List<GymReservation> {
@@ -68,27 +69,29 @@ class GymReservationService {
         return gymReservationRepository.findGymReservationsBetweenFirstDayAndLastDay(from.toDate(), to.toDate())
     }
 
-    fun getAllReservationsBetweenDatesForSpecificUser(from: LocalDate, to: LocalDate, user: User): List<GymReservation> {
-        return gymReservationRepository.findGymReservationsBetweenFirstDayAndLastDayAndUser(from.toDate(), to.toDate(), user)
+    fun updateExistingGymReservation(newGymReservation: GymReservation, reservationId: Long): GymReservation {
+        return if (newGymReservation.user != null) {
+            if (checkIfReservationIsInFirstOrSecondWeek(newGymReservation.date!!) == 1 && checkIfUserReachedMaximumReservationsForOneWeek(newGymReservation.user!!.id!!, 0)) {
+                addUserToExistingReservation(newGymReservation, reservationId)
+            } else if (checkIfReservationIsInFirstOrSecondWeek(newGymReservation.date!!) == 2 && checkIfUserReachedMaximumReservationsForOneWeek(newGymReservation.user!!.id!!, 1)) {
+                addUserToExistingReservation(newGymReservation, reservationId)
+            } else {
+                throw NumberOfReservationsExceed()
+            }
+        } else {
+            removeUserFromExistingReservation(newGymReservation,reservationId)
+        }
     }
 
-    fun updateExistingGymReservation(newGymReservation: GymReservation, reservationId: Long): ResponseEntity<GymReservation> {
-        return gymReservationRepository.findById(reservationId)
-                .map {
-                    existingGymReservation ->
-                    val updatedReservation: GymReservation = existingGymReservation
-                            .copy(reservation_number =  newGymReservation.reservation_number,
-                                    date = newGymReservation.date,
-                                    time_from = newGymReservation.time_from,
-                                    time_until = newGymReservation.time_until,
-                                    status = newGymReservation.status,
-                                    gym_number = newGymReservation.gym_number,
-                                    user = newGymReservation.user)
-                    if (newGymReservation.user != null) {
-                        sendConfirmationEmail(newGymReservation, updatedReservation.user!!)
-                    }
-                    ResponseEntity.ok().body(gymReservationRepository.save(updatedReservation))
-                }.orElse(ResponseEntity.notFound().build())
+    fun removeUserFromExistingReservation(gymReservation: GymReservation, reservationId: Long): GymReservation {
+        assert(gymReservation.id == reservationId)
+        return gymReservationRepository.save(gymReservation)
+    }
+
+    fun addUserToExistingReservation(gymReservation: GymReservation, reservationId: Long): GymReservation {
+        assert(gymReservation.id == reservationId)
+        sendConfirmationEmail(gymReservation,gymReservation.user!!)
+        return gymReservationRepository.save(gymReservation)
     }
 
     fun deleteGymReservation(reservationId: Long): ResponseEntity<Void> {
@@ -169,11 +172,38 @@ class GymReservationService {
         return firstDate < secondDate
     }
 
-    private fun checkIfUserHaveMaximumReservationsForOneWeek(userId: Long): Boolean {
-        val user = userService.getSingleUser(userId)
-        val allUsersReservationsForSpecificWeek = this.getAllReservationsBetweenDatesForSpecificUser(date, date.plusDays(7), user)
-        println(allUsersReservationsForSpecificWeek)
+    private fun checkIfUserReachedMaximumReservationsForOneWeek(userId: Long, weeksToAdd: Long): Boolean {
+        println(LocalizedWeek().getFirstDay().plusWeeks(weeksToAdd))
+        val allReservations = gymReservationRepository.
+                findGymReservationsBetweenFirstDayAndLastDay(LocalizedWeek().getFirstDay().plusWeeks(weeksToAdd).toDate(), LocalizedWeek().getLastDay().plusWeeks(weeksToAdd).minusDays(1).toDate())
+                .filter { gymReservation -> gymReservation.user != null }
+                .filter { gymReservation -> gymReservation.user!!.id == userId }
+                .filter { gymReservation -> gymReservation.status == Status.RESERVED }
 
-        return false
+        return allReservations.size < 2
+    }
+
+    private fun checkIfDateIsBetweenCurrentWeek(date: Date): Boolean {
+        return if (date.equals(LocalizedWeek().getFirstDay().toDate())) {
+            true
+        } else {
+            date.after(LocalizedWeek().getFirstDay().toDate()) && date.before(LocalizedWeek().getLastDay().minusDays(1).toDate())
+        }
+    }
+
+    private fun checkIfDateIsBetweenAnotherWeek(date: Date): Boolean {
+        return if (date.equals(LocalizedWeek().getFirstDay().plusWeeks(1).toDate())) {
+            true
+        } else {
+            date.after(LocalizedWeek().getFirstDay().plusWeeks(1).toDate()) && date.before(LocalizedWeek().getLastDay().plusWeeks(1).minusDays(1).toDate())
+        }
+    }
+
+    private fun checkIfReservationIsInFirstOrSecondWeek(date: Date): Int {
+        return when {
+            checkIfDateIsBetweenCurrentWeek(date) -> 1
+            checkIfDateIsBetweenAnotherWeek(date) -> 2
+            else -> 0
+        }
     }
 }
