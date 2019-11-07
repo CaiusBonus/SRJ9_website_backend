@@ -1,8 +1,11 @@
 package com.srj9.controller
 
+import com.srj9.exception.UserIsNotAuthenticatedException
+import com.srj9.model.ConfirmationToken
 import com.srj9.model.Role
 import com.srj9.model.RoleName
 import com.srj9.model.User
+import com.srj9.repository.ConfirmationTokenRepository
 import com.srj9.repository.RoleRepository
 import com.srj9.repository.UserRepository
 import com.srj9.security.jwt.JwtProvider
@@ -10,6 +13,7 @@ import com.srj9.security.message.request.LoginForm
 import com.srj9.security.message.request.SignUpForm
 import com.srj9.security.message.response.JwtResponse
 import com.srj9.security.message.response.ResponseMessage
+import com.srj9.service.EmailService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -18,15 +22,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.crypto.password.PasswordEncoder
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
 
 @RestController
-@RequestMapping("/api/auth")
+//@RequestMapping("/api")
 class AuthRestController {
 
     @Autowired
@@ -44,7 +45,15 @@ class AuthRestController {
     @Autowired
     lateinit var jwtProvider: JwtProvider
 
-    @PostMapping("/signin")
+    @Autowired
+    lateinit var confirmationTokenRepository: ConfirmationTokenRepository
+
+    @Autowired
+    lateinit var emailService: EmailService
+
+    private val urlForTokenConfirmation = "http://147.232.191.144:8087/confirm-account?token="
+
+    @PostMapping("/api/auth/signin")
     fun authenticateUser(@Valid @RequestBody loginRequest: LoginForm): ResponseEntity<Any> {
         val authentication = authenticationManager.authenticate(
                 UsernamePasswordAuthenticationToken(loginRequest.username, loginRequest.password)
@@ -56,10 +65,14 @@ class AuthRestController {
         var userDetails : UserDetails = authentication.principal as UserDetails
         var user = userRepository.findByUsername(userDetails.username)
 
-        return ResponseEntity.ok(JwtResponse(jwt, userDetails.username, userDetails.authorities, user.id))
+        if (user.isEnabled!!) {
+            return ResponseEntity.ok(JwtResponse(jwt, userDetails.username, userDetails.authorities, user.id))
+        } else {
+            throw UserIsNotAuthenticatedException()
+        }
     }
 
-    @PostMapping("/signup")
+    @PostMapping("/api/auth/signup")
     fun registerUser(@Valid @RequestBody signUpRequest: SignUpForm): ResponseEntity<Any> {
 
         // Check if user is already registered
@@ -95,6 +108,24 @@ class AuthRestController {
         user.role = roles
         userRepository.save(user)
 
+        val confirmationToken = ConfirmationToken(user)
+        confirmationTokenRepository.save(confirmationToken)
+
+
+        emailService.sendSimpleMessage(user.email!!, "Please authorize your email", "Your account with login: " + user.username + " was created please authorze your self via this link : " + urlForTokenConfirmation + confirmationToken.confirmationToken)
+
+
         return ResponseEntity(ResponseMessage("User registered successfully!"), HttpStatus.OK)
+    }
+
+    @RequestMapping(value= ["/confirm-account"], method= [ RequestMethod.GET, RequestMethod.POST])
+    fun confirmUserAccount(@RequestParam("token") confirmationToken: String): ResponseEntity<Any> {
+        val token = confirmationTokenRepository.findByConfirmationToken(confirmationToken)
+
+        val user = userRepository.findByEmail(token.user!!.email!!)
+        user.isEnabled = true
+        userRepository.save(user)
+
+        return ResponseEntity.ok("USER WAS AUTHORIZED NOW YOU CAN LOG IN")
     }
 }

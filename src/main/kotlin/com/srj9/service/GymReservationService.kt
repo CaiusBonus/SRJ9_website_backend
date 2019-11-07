@@ -41,9 +41,13 @@ class GymReservationService {
     var times_until = arrayOf("21:59","22:59","23:59","00:59")
     val date = LocalDate.now()
 
-    fun getAllGymReservations(): List<GymReservation> {
+    fun getAllGymReservationsWithoutClosedReservations(): List<GymReservation> {
         return gymReservationRepository.findAll(Sort.by(Sort.Direction.ASC, "id"))
                 .filter { gymReservation -> gymReservation.status != Status.CLOSED }
+    }
+
+    fun getAllGymReservations(): List<GymReservation> {
+        return gymReservationRepository.findAll()
     }
 
     fun getAllReservationsForSpecificUser(userId: Long): List<GymReservation> {

@@ -5,6 +5,7 @@ import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.stereotype.Component
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.scheduling.annotation.Async
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -20,6 +21,11 @@ class EmailServiceImpl: EmailService {
         message.setSubject(subject);
         message.setText(text);
         emailSender!!.send(message);
+    }
+
+    @Async
+    fun sendEmail(email: SimpleMailMessage) {
+        emailSender!!.send(email)
     }
 
     override fun sendSimpleMessageUsingTemplate(to: String, subject: String, template: SimpleMailMessage, vararg templateArgs: String) {

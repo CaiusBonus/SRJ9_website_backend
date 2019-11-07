@@ -40,7 +40,10 @@ data class User (
     @JoinTable(name = "user_roles",
             joinColumns = [JoinColumn(name = "user_id")],
             inverseJoinColumns = [JoinColumn(name = "role_id")])
-    var role: Set<Role> = HashSet()
+    var role: Set<Role> = HashSet(),
+
+    @Column(name = "is_enabled")
+    var isEnabled: Boolean? = false
 ) {
     constructor(first_name: String, last_name: String, username: String, email: String, password: String) : this() {
         this.first_name = first_name
