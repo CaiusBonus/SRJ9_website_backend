@@ -24,13 +24,8 @@ class SportOfficerService {
         return sportOfficerRepository.deleteById(sportOfficerId)
     }
 
-    fun updateSportOfficer(newSportOfficer: SportOfficer, sportOfficerId: Long): ResponseEntity<SportOfficer> {
-        return sportOfficerRepository.findById(sportOfficerId)
-                .map {
-                    existingSportOfficer ->
-                    val updatedSportOfficer: SportOfficer = existingSportOfficer
-                            .copy(email = newSportOfficer.email)
-                    ResponseEntity.ok().body(sportOfficerRepository.save(updatedSportOfficer))
-                }.orElse(ResponseEntity.notFound().build())
+    fun updateSportOfficer(newSportOfficer: SportOfficer, sportOfficerId: Long): SportOfficer {
+        assert(newSportOfficer.id == sportOfficerId)
+        return sportOfficerRepository.save(newSportOfficer)
     }
 }

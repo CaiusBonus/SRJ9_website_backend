@@ -23,11 +23,6 @@ class EmailServiceImpl: EmailService {
         emailSender!!.send(message);
     }
 
-    @Async
-    fun sendEmail(email: SimpleMailMessage) {
-        emailSender!!.send(email)
-    }
-
     override fun sendSimpleMessageUsingTemplate(to: String, subject: String, template: SimpleMailMessage, vararg templateArgs: String) {
         val text = String.format(template.text!!, templateArgs)
         sendSimpleMessage(to,subject,text)
@@ -51,7 +46,7 @@ class EmailServiceImpl: EmailService {
         val message = SimpleMailMessage()
         message.setTo(to)
         message.setSubject("Nová rezervácia bola vytvorená")
-        message.setText("Rezervácia na telocvičňu T" + gymReservation.gym_number + " dňa " + SimpleDateFormat("dd MMMM yyyy").format(gymReservation.date) +
+        message.setText("Rezervácia na telocvičňu T" + gymReservation.gym_number + " používateľom: "+ gymReservation.user!!.email + " dňa " + SimpleDateFormat("dd MMMM yyyy").format(gymReservation.date) +
                 " od " + gymReservation.time_from + " do " + gymReservation.time_until + " je vytvorená.")
         emailSender!!.send(message)
 

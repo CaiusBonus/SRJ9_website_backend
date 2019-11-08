@@ -24,7 +24,7 @@ class SportOfficerRestController {
     }
 
     @PutMapping("/sport_officer/{id}")
-    fun updateSportOfficer(@RequestBody sportOfficer: SportOfficer, @PathVariable sportOfficerId: Long): ResponseEntity<SportOfficer> {
+    fun updateSportOfficer(@RequestBody sportOfficer: SportOfficer, @PathVariable sportOfficerId: Long): SportOfficer {
         return sportOfficerService.updateSportOfficer(sportOfficer,sportOfficerId)
     }
 }
