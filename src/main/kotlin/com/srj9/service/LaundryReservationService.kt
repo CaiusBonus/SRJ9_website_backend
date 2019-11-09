@@ -63,17 +63,9 @@ class LaundryReservationService {
         }
     }
 
-    fun updateExistingLaundryReservation(newLaundryReservation: LaundryReservation, reservationId: Long): ResponseEntity<LaundryReservation> {
-        return laundryReservationRepository.findById(reservationId)
-                .map { existingLaundryReservation ->
-                    val updatedReservation: LaundryReservation = existingLaundryReservation
-                            .copy(reservation_number = newLaundryReservation.reservation_number,
-                                    date = newLaundryReservation.date,
-                                    time_from = newLaundryReservation.time_from,
-                                    time_until = newLaundryReservation.time_until,
-                                    status = newLaundryReservation.status)
-                    ResponseEntity.ok().body(laundryReservationRepository.save(updatedReservation))
-                }.orElse(ResponseEntity.notFound().build())
+    fun updateExistingLaundryReservation(newLaundryReservation: LaundryReservation, reservationId: Long): LaundryReservation {
+        assert(newLaundryReservation.id == reservationId)
+        return laundryReservationRepository.save(newLaundryReservation)
     }
 
     fun deleteLaundryReservation(reservationId: Long): ResponseEntity<Void> {
