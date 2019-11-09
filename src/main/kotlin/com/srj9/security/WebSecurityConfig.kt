@@ -66,6 +66,7 @@ class WebSecurityConfig: WebSecurityConfigurerAdapter() {
                 .antMatchers("/swagger-resources/**").permitAll()
                 .antMatchers("/v2/**").permitAll()
                 .antMatchers("/confirm-account*").permitAll()
+                .antMatchers("/api/gym_reservation").permitAll()
                 // End of swagger requests
                 // /API/ Must be authorized via Bearer token
                 .antMatchers(HttpMethod.OPTIONS, "/api/**")
