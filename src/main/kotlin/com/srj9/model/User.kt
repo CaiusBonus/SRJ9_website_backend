@@ -1,9 +1,6 @@
 package com.srj9.model
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-import jdk.nashorn.internal.objects.annotations.Constructor
 import lombok.Data
-
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Size

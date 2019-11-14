@@ -14,7 +14,4 @@ data class WashingMachine (
 
     @Column(name = "number")
     var number: Number? = null
-
-//    @OneToMany
-//    var laundryReservation: LaundryReservation? = null
 )
