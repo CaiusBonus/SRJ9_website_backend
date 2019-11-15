@@ -58,12 +58,15 @@ class WebSecurityConfig: WebSecurityConfigurerAdapter() {
     override fun configure(http: HttpSecurity) {
         http.cors().and().csrf().disable()
                 // dont authenticate this particular request
-                .authorizeRequests().antMatchers("/api/auth/**").permitAll()
+                .authorizeRequests()
+                .antMatchers("/api/auth/**").permitAll()
                 // Allow swagger to make requests
                 .antMatchers("/swagger-ui.html**/**").permitAll()
                 .antMatchers("/webjars/**").permitAll()
                 .antMatchers("/swagger-resources/**").permitAll()
                 .antMatchers("/v2/**").permitAll()
+                .antMatchers("/confirm-account*").permitAll()
+                .antMatchers("/api/gym_reservation").permitAll()
                 // End of swagger requests
                 // /API/ Must be authorized via Bearer token
                 .antMatchers(HttpMethod.OPTIONS, "/api/**")

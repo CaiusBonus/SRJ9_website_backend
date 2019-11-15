@@ -30,7 +30,7 @@ data class User (
     var username: String? = null,
 
     @NotBlank
-    @Size(min=8, max=100)
+    @Size(min=6, max=100)
     @Column(name="password")
     var password: String? = null,
 
@@ -39,10 +39,14 @@ data class User (
     @JoinTable(name = "user_roles",
             joinColumns = [JoinColumn(name = "user_id")],
             inverseJoinColumns = [JoinColumn(name = "role_id")])
-    var role: Set<Role> = HashSet()
+    var role: Set<Role> = HashSet(),
+
+    @Column(name = "is_enabled")
+    var isEnabled: Boolean? = false
 ) {
-    constructor(name: String, username: String, email: String, password: String) : this() {
-        first_name = name
+    constructor(first_name: String, last_name: String, username: String, email: String, password: String) : this() {
+        this.first_name = first_name
+        this.last_name = last_name
         this.username = username
         this.email = email
         this.password = password
