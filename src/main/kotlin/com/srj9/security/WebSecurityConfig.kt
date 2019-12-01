@@ -60,6 +60,7 @@ class WebSecurityConfig: WebSecurityConfigurerAdapter() {
                 // dont authenticate this particular request
                 .authorizeRequests()
                 .antMatchers("/api/auth/**").permitAll()
+                .antMatchers("/api/auth/*").permitAll()
                 // Allow swagger to make requests
                 .antMatchers("/swagger-ui.html**/**").permitAll()
                 .antMatchers("/webjars/**").permitAll()

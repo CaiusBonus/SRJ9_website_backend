@@ -47,6 +47,8 @@ class GymReservationService {
     }
 
     fun getAllGymReservations(): List<GymReservation> {
+        createGymReservationsForFirstGym()
+        createGymReservationsForSecondGym()
         return gymReservationRepository.findAll(Sort.by(Sort.Direction.ASC, "id"))
     }
 

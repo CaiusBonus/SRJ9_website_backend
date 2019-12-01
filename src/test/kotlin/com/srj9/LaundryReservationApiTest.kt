@@ -49,7 +49,7 @@ class LaundryReservationApiTest {
         laundryReservationService.createLaundryReservation(LaundryReservation(0L,"3123131", Date(), null,null, Status.RESERVED))
         val updatedReservation = laundryReservationService.updateExistingLaundryReservation(LaundryReservation(0L,"555555", Date(), null,null, Status.RESERVED),1L)
         println(updatedReservation)
-        assert(updatedReservation.statusCode.is2xxSuccessful)
+        assertNotNull(updatedReservation)
     }
 
     @Test

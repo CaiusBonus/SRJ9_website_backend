@@ -55,16 +55,15 @@ class LaundryReservationService {
         laundryTimes.forEach { (date, times) ->
             val reservationsForDay = laundryReservations.stream().filter {
                 laundryReservation ->
-
-                convertToLocalDate(laundryReservation.date!!) == (date) }.toList()
-            reservationsForDay.forEach { reservationForDay ->
-                val timeFrom = reservationForDay.time_from!!.toLocalDateTime().toLocalTime()
-                val timeUntil = reservationForDay.time_until!!.toLocalDateTime().toLocalTime()
-                for (time in times.keys) {
-                    if (time >= timeFrom && time <= timeUntil) {
-                        times[time] = false
+                    convertToLocalDate(laundryReservation.date!!) == (date) }.toList()
+                reservationsForDay.forEach { reservationForDay ->
+                    val timeFrom = reservationForDay.time_from!!.toLocalDateTime().toLocalTime()
+                    val timeUntil = reservationForDay.time_until!!.toLocalDateTime().toLocalTime()
+                    for (time in times.keys) {
+                        if (time >= timeFrom && time <= timeUntil && checkIfAllWashingMachinesAreTaken(reservationsForDay, timeFrom, timeUntil)) {
+                            times[time] = false
+                        }
                     }
-                }
             }
         }
     }
@@ -87,7 +86,7 @@ class LaundryReservationService {
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate()
     }
-    
+
     fun updateExistingLaundryReservation(newLaundryReservation: LaundryReservation, reservationId: Long): LaundryReservation {
         assert(newLaundryReservation.id == reservationId)
         return laundryReservationRepository.save(newLaundryReservation)
