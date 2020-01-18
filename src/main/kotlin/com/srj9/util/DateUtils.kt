@@ -22,7 +22,7 @@ class DateUtils {
         fun getTimesBetween(startTime: LocalTime, endTime: LocalTime, gapInMinutes: Int): List<LocalTime> {
             var times = ArrayList<LocalTime>()
             var time = startTime
-            while (time > endTime) {
+            while (time < endTime) {
                 times.add(time)
                 time = time.plusMinutes(gapInMinutes.toLong())
             }

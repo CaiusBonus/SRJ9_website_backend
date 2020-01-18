@@ -44,7 +44,7 @@ class MembersRestController {
             ApiResponse(code = 500, message = "Internal Server Error")
     )
     @PutMapping("/members/{memberId}")
-    fun updateExistingMember(@RequestBody member: Member, @PathVariable memberId: Long): ResponseEntity<Member> {
+    fun updateExistingMember(@RequestBody member: Member, @PathVariable memberId: Long): Member {
         return membersService.updateExistingMember(member,memberId)
     }
 

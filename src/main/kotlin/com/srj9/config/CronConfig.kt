@@ -13,10 +13,18 @@ class CronConfig {
     @Autowired
     lateinit var gymReservationService: GymReservationService
 
+    // Cron sa spusta kazdy 15-ty den v mesiaci
     @Scheduled(cron = "0 15 10 15 * ?")
     fun scheduleFixedRateTask() {
         println("------------------CRON JOB STARTED: CREATING RESERVATIONS------------------")
         gymReservationService.createGymReservationsForFirstGym()
         gymReservationService.createGymReservationsForSecondGym()
+    }
+
+    // Cron sa spusta kazdu noc o 00:10
+    @Scheduled(cron = "10 0 * * * ?")
+    fun scheduledFixedRateTaskForEveryDay() {
+        println("------------------CRON JOB STARTED: CLOSING OLD RESERVATIONS------------------")
+        gymReservationService.closeReservationEarlierThanToday()
     }
 }

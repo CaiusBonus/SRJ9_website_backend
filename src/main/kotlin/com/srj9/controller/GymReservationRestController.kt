@@ -27,6 +27,13 @@ class GymReservationRestController {
         return gymReservationService.getAllGymReservations()
     }
 
+    @ApiOperation(value = "Retrieve all gym reservations filtere, without closed reservations", notes = "Retrieves all not closed gym reservations", responseContainer = "List")
+    @ApiResponse(code = 200, message = "Successfully retrieved list of gym reservations")
+    @GetMapping("/gym_reservation_filtered")
+    fun getAllGymReservationsWithoutClosedReservations(): List<GymReservation> {
+        return gymReservationService.getAllGymReservationsWithoutClosedReservations()
+    }
+
     @ApiOperation(value = "Retrieve all gym reservations for specific user", responseContainer = "List")
     @ApiResponse(code = 200, message = "Successfully retrieved list of gym reservations")
     @GetMapping("/gym_reservation/user/{userId}")
@@ -83,7 +90,7 @@ class GymReservationRestController {
             ApiResponse(code = 500, message = "Internal Server Error")
     )
     @PutMapping("/gym_reservation/{reservationId}")
-    fun updateExistingGymReservation(@RequestBody gymReservation: GymReservation, @PathVariable reservationId: Long): ResponseEntity<GymReservation> {
+    fun updateExistingGymReservation(@RequestBody gymReservation: GymReservation, @PathVariable reservationId: Long): GymReservation {
         return gymReservationService.updateExistingGymReservation(gymReservation,reservationId)
     }
 

@@ -7,7 +7,12 @@ import javax.persistence.*
 
 @Data
 @Entity
-@Table(name="GYM_RESERVATION")
+@Table(name="GYM_RESERVATION", uniqueConstraints = [
+    UniqueConstraint(columnNames = ["date",
+                                    "time_from",
+                                    "time_until",
+                                    "gym_number"])
+])
 data class GymReservation (
 
     @Id

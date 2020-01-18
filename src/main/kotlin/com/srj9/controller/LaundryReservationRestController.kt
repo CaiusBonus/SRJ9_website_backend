@@ -77,7 +77,7 @@ class LaundryReservationRestController {
             ApiResponse(code = 500, message = "Internal Server Error")
     )
     @PutMapping("/laundry_reservation/{reservationId}")
-    fun updateExistingReservation(@RequestBody laundryReservation: LaundryReservation, @PathVariable reservationId: Long): ResponseEntity<LaundryReservation> {
+    fun updateExistingReservation(@RequestBody laundryReservation: LaundryReservation, @PathVariable reservationId: Long): LaundryReservation {
         return laundryReservationService.updateExistingLaundryReservation(laundryReservation,reservationId)
     }
 

@@ -16,8 +16,7 @@ import javax.persistence.*
 data class LaundryReservation (
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "RECORD_ID_SEQ")
-    @SequenceGenerator(name = "RECORD_ID_SEQ", sequenceName = "RECORD_ID_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy= GenerationType.TABLE)
     val id: Long,
 
     @Column(name="reservation_number")
@@ -33,11 +32,15 @@ data class LaundryReservation (
     var time_until: Timestamp? = null,
 
     @Column(name="status")
-    var status: Status? = null
+    var status: Status? = null,
 
-//    @ManyToOne
-//    var washing_machine: WashingMachine? = null
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    var user: User? = null,
+
+    @ManyToOne
+    @JoinColumn(name="washing_machine_id")
+    var washing_machine: WashingMachine? = null
 ) {
-    private val SEQ: String = "RECORD_ID_SEQ"
 }
 

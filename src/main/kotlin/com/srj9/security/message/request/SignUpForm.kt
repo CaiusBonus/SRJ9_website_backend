@@ -5,9 +5,12 @@ import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Size
 
 class SignUpForm {
-    @NotBlank
-    @Size(min = 3, max = 50)
-    var name: String? = null
+
+    @Size(max = 50)
+    var first_name: String? = null
+
+    @Size(max = 50)
+    var last_name: String? = null
 
     @NotBlank
     @Size(min = 3, max = 50)

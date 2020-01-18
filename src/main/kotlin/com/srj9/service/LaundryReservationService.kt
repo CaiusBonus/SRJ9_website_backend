@@ -11,6 +11,9 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.LocalTime
+import java.time.ZoneId
+import java.util.*
+import java.util.stream.Collectors
 import kotlin.streams.toList
 
 @Service
@@ -50,30 +53,43 @@ class LaundryReservationService {
 
     private fun markReservedTimes(laundryReservations: List<LaundryReservation>, laundryTimes: Map<LocalDate, MutableMap<LocalTime, Boolean>>) {
         laundryTimes.forEach { (date, times) ->
-            val reservationsForDay = laundryReservations.stream().filter { laundryReservation -> laundryReservation.date!!.equals(date.toDate()) }.toList()
-            reservationsForDay.forEach { reservationForDay ->
-                val timeFrom = reservationForDay.time_from!!.toLocalDateTime().toLocalTime()
-                val timeUntil = reservationForDay.time_until!!.toLocalDateTime().toLocalTime()
-                for (time in times.keys) {
-                    if (time >= timeFrom && time <= timeUntil) {
-                        times[time] = false
+            val reservationsForDay = laundryReservations.stream().filter {
+                laundryReservation ->
+                    convertToLocalDate(laundryReservation.date!!) == (date) }.toList()
+                reservationsForDay.forEach { reservationForDay ->
+                    val timeFrom = reservationForDay.time_from!!.toLocalDateTime().toLocalTime()
+                    val timeUntil = reservationForDay.time_until!!.toLocalDateTime().toLocalTime()
+                    for (time in times.keys) {
+                        if (time >= timeFrom && time <= timeUntil && checkIfAllWashingMachinesAreTaken(reservationsForDay, timeFrom, timeUntil)) {
+                            times[time] = false
+                        }
                     }
-                }
             }
         }
     }
 
-    fun updateExistingLaundryReservation(newLaundryReservation: LaundryReservation, reservationId: Long): ResponseEntity<LaundryReservation> {
-        return laundryReservationRepository.findById(reservationId)
-                .map { existingLaundryReservation ->
-                    val updatedReservation: LaundryReservation = existingLaundryReservation
-                            .copy(reservation_number = newLaundryReservation.reservation_number,
-                                    date = newLaundryReservation.date,
-                                    time_from = newLaundryReservation.time_from,
-                                    time_until = newLaundryReservation.time_until,
-                                    status = newLaundryReservation.status)
-                    ResponseEntity.ok().body(laundryReservationRepository.save(updatedReservation))
-                }.orElse(ResponseEntity.notFound().build())
+    private fun checkIfAllWashingMachinesAreTaken(laundryReservations: List<LaundryReservation>, timeFrom: LocalTime, timeUntil: LocalTime): Boolean {
+        val filteredReservations = laundryReservations.stream().filter { laundryReservation ->
+            laundryReservation.time_from!!.toLocalDateTime().toLocalTime() == timeFrom
+                    && laundryReservation.time_until!!.toLocalDateTime().toLocalTime() == timeUntil
+        }.collect(Collectors.toList())
+
+        if (filteredReservations.size == 12) {
+            return true
+        }
+
+        return false
+    }
+
+    private fun convertToLocalDate(dateToConvert: Date): LocalDate {
+        return dateToConvert.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate()
+    }
+
+    fun updateExistingLaundryReservation(newLaundryReservation: LaundryReservation, reservationId: Long): LaundryReservation {
+        assert(newLaundryReservation.id == reservationId)
+        return laundryReservationRepository.save(newLaundryReservation)
     }
 
     fun deleteLaundryReservation(reservationId: Long): ResponseEntity<Void> {

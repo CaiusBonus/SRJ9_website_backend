@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit4.SpringRunner
+import java.sql.Timestamp
 import java.util.*
 import kotlin.test.assertNotNull
 
@@ -48,7 +49,7 @@ class LaundryReservationApiTest {
         laundryReservationService.createLaundryReservation(LaundryReservation(0L,"3123131", Date(), null,null, Status.RESERVED))
         val updatedReservation = laundryReservationService.updateExistingLaundryReservation(LaundryReservation(0L,"555555", Date(), null,null, Status.RESERVED),1L)
         println(updatedReservation)
-        assert(updatedReservation.statusCode.is2xxSuccessful)
+        assertNotNull(updatedReservation)
     }
 
     @Test
@@ -57,5 +58,15 @@ class LaundryReservationApiTest {
         val deletedReservation = laundryReservationService.deleteLaundryReservation(1L)
         println(deletedReservation)
         assert(deletedReservation.statusCode.is2xxSuccessful)
+    }
+
+    @Test
+    fun getAllReservationsBetweenDates() {
+        laundryReservationService.createLaundryReservation(LaundryReservation(
+                0,null,Date(), Timestamp.valueOf("2019-11-15 15:30:00"), Timestamp.valueOf("2019-11-15 16:30:00"),Status.RESERVED, null, null
+        ))
+        val reservations = laundryReservationService.getAllReservationsForCurrentWeek()
+        println(reservations)
+        assertNotNull(reservations)
     }
 }
