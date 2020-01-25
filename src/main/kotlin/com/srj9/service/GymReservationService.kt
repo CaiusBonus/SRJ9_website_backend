@@ -68,7 +68,8 @@ class GymReservationService {
         val localizedWeek = LocalizedWeek()
         localizedWeek.getFirstDay()
         localizedWeek.getLastDay()
-        return gymReservationRepository.findGymReservationsBetweenFirstDayAndLastDay(localizedWeek.getFirstDay().toDate(), localizedWeek.getLastDay().toDate())
+        return gymReservationRepository.findGymReservationsBetweenFirstDayAndLastDay(localizedWeek.getFirstDay().toDate(),
+                localizedWeek.getLastDay().toDate())
     }
 
     fun getAllReservationsBetweenDates(from: LocalDate, to: LocalDate): List<GymReservation> {
@@ -77,9 +78,11 @@ class GymReservationService {
 
     fun updateExistingGymReservation(newGymReservation: GymReservation, reservationId: Long): GymReservation {
         return if (newGymReservation.user != null) {
-            if (checkIfReservationIsInFirstOrSecondWeek(newGymReservation.date!!) == 1 && checkIfUserReachedMaximumReservationsForOneWeek(newGymReservation.user!!.id!!, 0)) {
+            if (checkIfReservationIsInFirstOrSecondWeek(newGymReservation.date!!) == 1
+                    && checkIfUserReachedMaximumReservationsForOneWeek(newGymReservation.user!!.id!!, 0)) {
                 addUserToExistingReservation(newGymReservation, reservationId)
-            } else if (checkIfReservationIsInFirstOrSecondWeek(newGymReservation.date!!) == 2 && checkIfUserReachedMaximumReservationsForOneWeek(newGymReservation.user!!.id!!, 1)) {
+            } else if (checkIfReservationIsInFirstOrSecondWeek(newGymReservation.date!!) == 2
+                    && checkIfUserReachedMaximumReservationsForOneWeek(newGymReservation.user!!.id!!, 1)) {
                 addUserToExistingReservation(newGymReservation, reservationId)
             } else {
                 throw NumberOfReservationsExceed()
@@ -116,18 +119,36 @@ class GymReservationService {
         for (i in 1..41) {
             if (checkIfIsIteratorInSpecificRange(arrayOf(8,15,22,29,36).toList(),i)) firstTuesdayInMonth = firstTuesdayInMonth.plusWeeks(1)
             if (checkIfIsIteratorInSpecificRange(arrayOf(10,17,24,31,38).toList(),i)) firstThurstDayInMonth = firstThurstDayInMonth.plusWeeks(1)
-            if(checkIfIsIteratorInSpecificRange(arrayOf(13,20,27,34,41).toList(),i)) firstSundayInMonth = firstSundayInMonth.plusWeeks(1)
+            if (checkIfIsIteratorInSpecificRange(arrayOf(13,20,27,34,41).toList(),i)) firstSundayInMonth = firstSundayInMonth.plusWeeks(1)
 
             if (checkIfIsIteratorInSpecificRange(arrayOf(1,8,15,22,29,36).toList(),i)) {
-                for (j in 0..3) { gymReservationsForFirstGym.add(GymReservation().copy(date = firstTuesdayInMonth.toDate(), status = Status.FREE, gym_number = 1, time_from = timesFrom[j], time_until = timesUntil[j])) }
+                for (j in 0..3) { gymReservationsForFirstGym.add(GymReservation().copy(
+                        date = firstTuesdayInMonth.toDate(),
+                        status = Status.FREE,
+                        gym_number = 1,
+                        time_from = timesFrom[j],
+                        time_until = timesUntil[j]))
+                }
             }
 
             if (checkIfIsIteratorInSpecificRange(arrayOf(3,10,17,24,31,38).toList(),i)) {
-                for (j in 0..3) { gymReservationsForFirstGym.add(GymReservation().copy(date = firstThurstDayInMonth.toDate(), status = Status.FREE, gym_number = 1, time_from = timesFrom[j], time_until = timesUntil[j])) }
+                for (j in 0..3) { gymReservationsForFirstGym.add(GymReservation().copy(
+                        date = firstThurstDayInMonth.toDate(),
+                        status = Status.FREE,
+                        gym_number = 1,
+                        time_from = timesFrom[j],
+                        time_until = timesUntil[j]))
+                }
             }
 
             if (checkIfIsIteratorInSpecificRange(arrayOf(6,13,20,27,34,41).toList(),i)) {
-                for (j in 0..3) { gymReservationsForFirstGym.add(GymReservation().copy(date = firstSundayInMonth.toDate(), status = Status.FREE, gym_number = 1, time_from = timesFrom[j], time_until = timesUntil[j])) }
+                for (j in 0..3) { gymReservationsForFirstGym.add(GymReservation().copy(
+                        date = firstSundayInMonth.toDate(),
+                        status = Status.FREE,
+                        gym_number = 1,
+                        time_from = timesFrom[j],
+                        time_until = timesUntil[j]))
+                }
             }
         }
 
@@ -143,11 +164,23 @@ class GymReservationService {
             if (checkIfIsIteratorInSpecificRange(arrayOf(10,17,24,31,38).toList(),i)) firstThurstDayInMonth = firstThurstDayInMonth.plusWeeks(1)
 
             if (checkIfIsIteratorInSpecificRange(arrayOf(1,8,15,22,29,36).toList(),i)) {
-                for (j in 0..3) { gymReservationsForSecondGym.add(GymReservation().copy(date = firstTuesdayInMonth.toDate(), status = Status.FREE, gym_number = 2, time_from = timesFrom[j], time_until = timesUntil[j])) }
+                for (j in 0..3) { gymReservationsForSecondGym.add(GymReservation().copy(
+                        date = firstTuesdayInMonth.toDate(),
+                        status = Status.FREE,
+                        gym_number = 2,
+                        time_from = timesFrom[j],
+                        time_until = timesUntil[j]))
+                }
             }
 
             if (checkIfIsIteratorInSpecificRange(arrayOf(3,10,17,24,31,38).toList(),i)) {
-                for (j in 0..3) { gymReservationsForSecondGym.add(GymReservation().copy(date = firstThurstDayInMonth.toDate(), status = Status.FREE, gym_number = 2, time_from = timesFrom[j], time_until = timesUntil[j])) }
+                for (j in 0..3) { gymReservationsForSecondGym.add(GymReservation().copy(
+                        date = firstThurstDayInMonth.toDate(),
+                        status = Status.FREE,
+                        gym_number = 2,
+                        time_from = timesFrom[j],
+                        time_until = timesUntil[j]))
+                }
             }
         }
         gymReservationsForSecondGym.forEach { reservation -> gymReservationRepository.save(reservation) }
@@ -181,7 +214,8 @@ class GymReservationService {
     private fun checkIfUserReachedMaximumReservationsForOneWeek(userId: Long, weeksToAdd: Long): Boolean {
         println(LocalizedWeek().getFirstDay().plusWeeks(weeksToAdd))
         val allReservations = gymReservationRepository.
-                findGymReservationsBetweenFirstDayAndLastDay(LocalizedWeek().getFirstDay().plusWeeks(weeksToAdd).toDate(), LocalizedWeek().getLastDay().plusWeeks(weeksToAdd).minusDays(1).toDate())
+                findGymReservationsBetweenFirstDayAndLastDay(LocalizedWeek().getFirstDay().plusWeeks(weeksToAdd).toDate(),
+                        LocalizedWeek().getLastDay().plusWeeks(weeksToAdd).minusDays(1).toDate())
                 .filter { gymReservation -> gymReservation.user != null }
                 .filter { gymReservation -> gymReservation.user!!.id == userId }
                 .filter { gymReservation -> gymReservation.status == Status.RESERVED || gymReservation.status == Status.CLOSED }
@@ -193,7 +227,8 @@ class GymReservationService {
         return if (date == LocalizedWeek().getFirstDay().toDate()) {
             true
         } else {
-            date.after(LocalizedWeek().getFirstDay().toDate()) && date.before(LocalizedWeek().getLastDay().minusDays(1).toDate())
+            date.after(LocalizedWeek().getFirstDay().toDate())
+                    && date.before(LocalizedWeek().getLastDay().minusDays(1).toDate())
         }
     }
 
@@ -201,7 +236,8 @@ class GymReservationService {
         return if (date == LocalizedWeek().getFirstDay().plusWeeks(1).toDate()) {
             true
         } else {
-            date.after(LocalizedWeek().getFirstDay().plusWeeks(1).toDate()) && date.before(LocalizedWeek().getLastDay().plusWeeks(1).minusDays(1).toDate())
+            date.after(LocalizedWeek().getFirstDay().plusWeeks(1).toDate())
+                    && date.before(LocalizedWeek().getLastDay().plusWeeks(1).minusDays(1).toDate())
         }
     }
 
