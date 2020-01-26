@@ -13,31 +13,31 @@ import javax.persistence.*
                                     "time_until",
                                     "gym_number"])
 ])
-data class GymReservation (
+class GymReservation {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.TABLE)
-    val id: Long? = 0,
+    @GeneratedValue(strategy = GenerationType.TABLE)
+    val id: Long? = 0
 
-    @Column(name="reservation_number")
-    var reservation_number: String? = null,
+    @Column(name = "reservation_number")
+    var reservation_number: String? = null
 
-    @Column(name="date")
-    var date: Date? = null,
+    @Column(name = "date")
+    var date: Date? = null
 
-    @Column(name="time_from")
-    var time_from: String? = null,
+    @Column(name = "time_from")
+    var time_from: String? = null
 
-    @Column(name="time_until")
-    var time_until: String? = null,
+    @Column(name = "time_until")
+    var time_until: String? = null
 
-    @Column(name="status")
-    var status: Status? = null,
+    @Column(name = "status")
+    var status: Status? = null
 
-    @Column(name="gym_number")
-    var gym_number: Int? = null,
+    @Column(name = "gym_number")
+    var gym_number: Int? = null
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     var user: User? = null
-)
+}

@@ -13,34 +13,33 @@ import javax.persistence.*
 @Data
 @Entity
 @Table(name="LAUNDRY_RESERVATION")
-data class LaundryReservation (
+class LaundryReservation {
 
     @Id
     @GeneratedValue(strategy= GenerationType.TABLE)
-    val id: Long,
+    var id: Long? = null
 
     @Column(name="reservation_number")
-    var reservation_number: String? = null,
+    var reservation_number: String? = null
 
     @Column(name="date")
-    var date: Date? = null,
+    var date: Date? = null
 
     @Column(name="time_from")
-    var time_from: Timestamp? = null,
+    var time_from: Timestamp? = null
 
     @Column(name="time_until")
-    var time_until: Timestamp? = null,
+    var time_until: Timestamp? = null
 
     @Column(name="status")
-    var status: Status? = null,
+    var status: Status? = null
 
     @ManyToOne
     @JoinColumn(name="user_id")
-    var user: User? = null,
+    var user: User? = null
 
     @ManyToOne
     @JoinColumn(name="washing_machine_id")
     var washing_machine: WashingMachine? = null
-) {
 }
 

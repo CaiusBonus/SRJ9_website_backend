@@ -9,27 +9,27 @@ import javax.persistence.*
 @Table(name = "ROOM", uniqueConstraints = [
         UniqueConstraint(columnNames = ["block", "room_number"])
 ])
-data class Room(
+class Room {
 
         @Id
         @GeneratedValue(strategy = GenerationType.TABLE)
-        var id: Long? = null,
+        var id: Long? = null
 
         @OneToMany(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
         @JoinColumn(name = "room_id", nullable = true)
         @OnDelete(action = OnDeleteAction.CASCADE)
-        var users: MutableList<User>? = null,
+        var users: MutableList<User>? = mutableListOf()
 
         @Column(name = "block")
         @Enumerated(EnumType.STRING)
-        var block: RoomBlock? = null,
+        var block: RoomBlock? = RoomBlock.A
 
         @Column(name = "room_number")
-        var roomNumber: Int? = null,
+        var roomNumber: Int? = 100
 
         @Column(name = "is_available", columnDefinition = "true")
-        var isAvailable: Boolean? = null,
+        var isAvailable: Boolean? = true
 
         @Column(name = "available_capacity", columnDefinition = "4")
-        var capacity: Int? = null
-)
+        var capacity: Int? = 4
+}
